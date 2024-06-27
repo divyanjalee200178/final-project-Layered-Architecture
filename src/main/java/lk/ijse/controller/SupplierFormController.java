@@ -10,8 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Supplier;
+import lk.ijse.dto.CustomerDTO;
+import lk.ijse.dto.SupplierDTO;
+import lk.ijse.entity.Supplier;
+import lk.ijse.model.tm.CustomerTm;
 import lk.ijse.model.tm.SupplierTm;
 import lk.ijse.repository.SupplierRepo;
 
@@ -86,6 +91,7 @@ public class SupplierFormController {
     @FXML
     private TextField txtTelSearch;
 
+    SupplierBO supplierBO= (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.SUPPLIER);
     public void initialize(){
         setCellValueFactory();
         loadAllSupplier();
@@ -197,35 +203,38 @@ public class SupplierFormController {
 
     }
 
+    boolean existSupplier(String id) throws SQLException, ClassNotFoundException {
+        return supplierBO.existSupplier(id);
+    }
+
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtId.getText();
         String name = txtName.getText();
         String address = txtAddress.getText();
         String email = txtEmail.getText();
         String tel = txtTel.getText();
 
-        String sql = "INSERT INTO Supplier VALUES(?,?,?,?,?)";
+       // String sql = "INSERT INTO Supplier VALUES(?,?,?,?,?)";
 
-        try {
-            Connection connection = DbConnection.getInstance().getConnection();
-            PreparedStatement pstm = connection.prepareStatement(sql);
-            pstm = connection.prepareStatement(sql);
-            pstm.setObject(1, id);
-            pstm.setObject(2, name);
-            pstm.setObject(3, address);
-            pstm.setObject(4, email);
-            pstm.setObject(5, tel);
-
-            boolean isSaved = pstm.executeUpdate() > 0;
-            if (isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Supplier saved !").show();
+        if (btnSave.getText().equalsIgnoreCase("Save")) {
+            try {
+                // Check if customer with the same ID already exists
+                if (existSupplier(id)) {
+                    new Alert(Alert.AlertType.ERROR, id + " already exists").show();
+                } else {
+                    // Save customer if it doesn't exist
+                    supplierBO.saveSupplier(new SupplierDTO(id, name, address, email, tel));
+                    tblSupplier.getItems().add(new SupplierTm(id, name,email,address,tel));
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                new Alert(Alert.AlertType.ERROR, "Error saving customer: " + e.getMessage()).show();
             }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
         initialize();
     }
+
 
 
 
@@ -247,7 +256,7 @@ public class SupplierFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
         String name=txtName.getText();
         String address=txtAddress.getText();
@@ -256,20 +265,13 @@ public class SupplierFormController {
 
 
         //String sql = "UPDATE Supplier SET name = ?, address = ?, email = ?, number=? WHERE id = ?";
-        String sql= "UPDATE Supplier SET name = ?, number = ?, address = ?, email=? WHERE id = ?";
+        //String sql= "UPDATE Supplier SET name = ?, number = ?, address = ?, email=? WHERE id = ?";
         try {
-            Connection connection=DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,name);
-            pstm.setObject(2,tel);
-            pstm.setObject(3,address);
-            pstm.setObject(4,email);
-            pstm.setObject(5,id);
-
-            if(pstm.executeUpdate()>0) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Supplier updated !").show();
-                clearFields();
+            if(!existSupplier(id)){
+                new Alert(Alert.AlertType.ERROR,"Can't updated");
             }
+            supplierBO.updateSupplier(new SupplierDTO(id,name,email,tel,address));
+            tblSupplier.getItems().add(new SupplierTm(id, name,email,tel,address));
         }catch(SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

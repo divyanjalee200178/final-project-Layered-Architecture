@@ -2,6 +2,7 @@ package lk.ijse.bo;
 
 import lk.ijse.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.bo.custom.impl.EmployeeBOImpl;
+import lk.ijse.bo.custom.impl.SupplierBOImpl;
 
 import javax.swing.plaf.PanelUI;
 
@@ -23,6 +24,8 @@ public class BOFactory {
                 return  new CustomerBOImpl();
             case EMPLOYEE:
                 return new EmployeeBOImpl();
+            case SUPPLIER:
+                return new SupplierBOImpl();
             default:
                 return null;
         }

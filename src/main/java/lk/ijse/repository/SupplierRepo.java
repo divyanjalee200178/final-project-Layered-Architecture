@@ -1,8 +1,8 @@
 package lk.ijse.repository;
 
 import lk.ijse.db.DbConnection;
+import lk.ijse.entity.Supplier;
 import lk.ijse.model.Employee;
-import lk.ijse.model.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,19 +35,8 @@ public class SupplierRepo {
         return null;
     }
 
-    public static boolean update(Employee employee) throws SQLException {
-        String sql = "UPDATE Supplier SET name = ?, address = ?,email=?, number = ? WHERE id = ?";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setObject(1, employee.getName());
-        pstm.setObject(2, employee.getAddress());
-        pstm.setObject(3, employee.getTel());
-        pstm.setObject(4,employee.getEmail());
-        pstm.setObject(5, employee.getId());
 
-        return pstm.executeUpdate() > 0;
-    }
     public static List<Supplier> getAll() throws SQLException {
         String sql = "SELECT * FROM Supplier";
 

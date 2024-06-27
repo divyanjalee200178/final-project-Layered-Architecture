@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class CustomerDAOImpl implements CustomerDAO {
     public boolean delete(String id) throws SQLException {
-        return SQLUtil.execute("DELETE FROM customer WHERE id=?");
+        return SQLUtil.execute("DELETE FROM customer WHERE id=?",id);
     }
 
     @Override

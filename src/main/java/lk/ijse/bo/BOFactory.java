@@ -1,6 +1,7 @@
 package lk.ijse.bo;
 
 import lk.ijse.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.bo.custom.impl.EmployeeBOImpl;
 
 import javax.swing.plaf.PanelUI;
 
@@ -20,6 +21,8 @@ public class BOFactory {
         switch (types){
             case CUSTOMER:
                 return  new CustomerBOImpl();
+            case EMPLOYEE:
+                return new EmployeeBOImpl();
             default:
                 return null;
         }

@@ -10,8 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.EmployeeBO;
 import lk.ijse.db.DbConnection;
+import lk.ijse.dto.CustomerDTO;
+import lk.ijse.dto.EmployeeDTO;
 import lk.ijse.model.Employee;
+import lk.ijse.model.tm.CustomerTm;
 import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.repository.EmployeeRepo;
 
@@ -86,6 +91,7 @@ public class EmployeeFormController {
     @FXML
     private TextField txtTelSearch;
 
+    EmployeeBO employeeBO= (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
     public void initialize(){
         setCellValueFactory();
         loadAllEmployee();
@@ -96,7 +102,7 @@ public class EmployeeFormController {
     private void addRegex(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (textField == txtId && !newValue.matches("^S.*$")){
+            if (textField == txtId && !newValue.matches("^E.*$")){
                 txtId.setStyle("-fx-focus-color:#f21e0f");
                 txtId.clear();
             }else {
@@ -169,33 +175,35 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
         String name=txtName.getText();
         String address=txtAddress.getText();
         String email=txtEmail.getText();
         String tel=txtTel.getText();
 
-        String sql="INSERT INTO Employee VALUES(?,?,?,?,?)";
+       // String sql="INSERT INTO Employee VALUES(?,?,?,?,?)";
+        if (btnSave.getText().equalsIgnoreCase("Save")) {
+            try {
 
-        try{
-            Connection connection= DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,id);
-            pstm.setObject(2,name);
-            pstm.setObject(3,address);
-            pstm.setObject(4,email);
-            pstm.setObject(5,tel);
+                if (existEmployee(id)) {
+                    new Alert(Alert.AlertType.ERROR, id + " already exists").show();
+                } else {
 
-            boolean isSaved=pstm.executeUpdate()>0;
-            if(isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Employee saved !").show();
+                    employeeBO.saveEmployee(new EmployeeDTO(id, name, address, email, tel));
+                    tblEmployee.getItems().add(new EmployeeTm(id, name,email,address,tel));
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                new Alert(Alert.AlertType.ERROR, "Error saving customer: " + e.getMessage()).show();
             }
-        }catch (SQLException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
         initialize();
+    }
+
+
+    boolean existEmployee(String id) throws SQLException, ClassNotFoundException {
+        return employeeBO.existEmployee(id);
     }
 
     @FXML
@@ -243,7 +251,7 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
         String name=txtName.getText();
         String address=txtAddress.getText();
@@ -253,14 +261,17 @@ public class EmployeeFormController {
         Employee employee=new Employee(id,name,address,email,tel);
 
         try{
-            boolean isUpdated= EmployeeRepo.update(employee);
-            if(isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Employee updated !").show();
+            if(!existEmployee(id)){
+                new Alert(Alert.AlertType.ERROR,"Can't updated");
             }
-            }catch (SQLException e){
+            employeeBO.updateEmployee(new EmployeeDTO(id,name,email,tel,address));
+            tblEmployee.getItems().add(new EmployeeTm(id, name,email,tel,address));
+        }catch(SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
         initialize();
+
     }
 
     @FXML

@@ -11,14 +11,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Customer;
 import lk.ijse.model.Item;
-import lk.ijse.model.tm.CustomerTm;
 import lk.ijse.model.tm.ItemTm;
-import lk.ijse.repository.CustomerRepo;
 import lk.ijse.repository.ItemRepo;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

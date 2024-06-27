@@ -1,4 +1,4 @@
-package lk.ijse.model;
+package lk.ijse.entity;
 
 public class Customer {
     private String id;

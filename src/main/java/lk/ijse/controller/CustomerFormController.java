@@ -1,6 +1,5 @@
 package lk.ijse.controller;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,12 +10,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Customer;
-import lk.ijse.model.Supplier;
+import lk.ijse.dto.CustomerDTO;
+import lk.ijse.entity.Customer;
 import lk.ijse.model.tm.CustomerTm;
 import lk.ijse.repository.CustomerRepo;
-import lk.ijse.repository.SupplierRepo;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -86,7 +86,7 @@ public class CustomerFormController {
     @FXML
     private TextField txtTelSearch;
 
-
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
     public void initialize(){
         setCellValueFactory();
@@ -123,6 +123,7 @@ public class CustomerFormController {
         colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colTel.setCellValueFactory(new PropertyValueFactory<>("tel"));
+
    }
 
    private void loadAllCustomer(){
@@ -146,6 +147,8 @@ public class CustomerFormController {
        }catch (SQLException e){
            throw new RuntimeException(e);
        }
+
+
    }
 
     @FXML
@@ -157,29 +160,44 @@ public class CustomerFormController {
         stage.setTitle("Dashboard Form");
         stage.centerOnScreen();
     }
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+        return customerBO.existCustomer(id);
+    }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event)    {
         String id=txtId.getText();
 
-        String sql="DELETE FROM Customer WHERE id=?";
+       // String sql="DELETE FROM Customer WHERE id=?";
 
         try{
-            Connection connection=DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,id);
-
-            if(pstm.executeUpdate()>0) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Customer deleted !").show();
-                clearFields();
-            }else{
-                new Alert(Alert.AlertType.INFORMATION,"Customer id can't be found !");
-
+            if(!existCustomer(id)){
+                new Alert(Alert.AlertType.ERROR,"There is no such customer associated with the id " + id).show();
             }
-        }catch (SQLException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            customerBO.deleteCustomer(id);
+
+            tblCustomer.getItems().remove(tblCustomer.getSelectionModel().getSelectedItem());
+            tblCustomer.getSelectionModel().clearSelection();
+            initUI();
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        initialize();
+
+    }
+
+    private void initUI() {
+           clearFields();
+           txtId.setDisable(true);
+           txtName.setDisable(true);
+           txtAddress.setDisable(true);
+           txtTel.setDisable(true);
+           txtEmail.setDisable(true);
+           txtId.setEditable(false);
+           btnSave.setDisable(true);
+           btnDelete.setDisable(true);
+
     }
 
     @FXML
@@ -193,60 +211,61 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnSavetOnAction(ActionEvent event) {
+    void btnSavetOnAction(ActionEvent event) throws ClassNotFoundException {
+        String id = txtId.getText();
+        String name = txtName.getText();
+        String tel = txtTel.getText();
+        String address = txtAddress.getText();
+        String email = txtEmail.getText();
+
+
+        //String sql="INSERT INTO Customer VALUES(?,?,?,?,?)";
+
+        if (btnSave.getText().equalsIgnoreCase("Save")) {
+            try {
+                // Check if customer with the same ID already exists
+                if (existCustomer(id)) {
+                    new Alert(Alert.AlertType.ERROR, id + " already exists").show();
+                } else {
+                    // Save customer if it doesn't exist
+                    customerBO.saveCustomer(new CustomerDTO(id, name, address, email, tel));
+                    tblCustomer.getItems().add(new CustomerTm(id, name,email,address,tel));
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                new Alert(Alert.AlertType.ERROR, "Error saving customer: " + e.getMessage()).show();
+            }
+        }
+
+        initialize();
+    }
+
+
+
+    @FXML
+    void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
         String name=txtName.getText();
         String address=txtAddress.getText();
         String email=txtEmail.getText();
         String tel=txtTel.getText();
 
-        String sql="INSERT INTO Customer VALUES(?,?,?,?,?)";
-
+        //String sql="SELECT * FROM Customer WHERE id=?";
         try{
-            Connection connection= DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,id);
-            pstm.setObject(2,name);
-            pstm.setObject(3,address);
-            pstm.setObject(4,email);
-            pstm.setObject(5,tel);
+            if(!existCustomer(id)){
+        CustomerDTO customer=customerBO.searchCustomer(new CustomerDTO(id,name,tel,address,email));
 
-            boolean isSaved=pstm.executeUpdate()>0;
-            if(isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Customer saved !").show();
-            }
-            }catch (SQLException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }
-        initialize();
-    }
+        txtName.setText(customer.getName());
+        txtTel.setText(customer.getTel());
+        txtTel.setText(customer.getAddress());
+        txtEmail.setText(customer.getEmail());
 
-    @FXML
-    void btnSearchOnAction(ActionEvent event) {
-        String id=txtId.getText();
-
-        String sql="SELECT * FROM Customer WHERE id=?";
-        try{
-            Connection connection=DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,id);
-
-            ResultSet resultSet=pstm.executeQuery();
-            if(resultSet.next()){
-                String name=resultSet.getString(2);
-                String address=resultSet.getString(3);
-                String email=resultSet.getString(4);
-                String tel=resultSet.getString(5);
-
-                txtName.setText(name);
-                txtAddress.setText(address);
-                txtEmail.setText(email);
-                txtTel.setText(tel);
-
-            }else{
-                new Alert(Alert.AlertType.INFORMATION, "Customer id not found !");
-
+            }else {
+                //clearFields();
+                tblCustomer.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
+                tblCustomer.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
+                tblCustomer.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("Tel"));
+                tblCustomer.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("address"));
+                tblCustomer.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("email"));
             }
         }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -254,34 +273,28 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
         String name=txtName.getText();
         String address=txtAddress.getText();
         String email=txtEmail.getText();
         String tel=txtTel.getText();
 
-
-        //String sql = "UPDATE Customer SET name = ?, address = ?, email = ?, number=? WHERE id = ?";
-        String sql = "UPDATE Customer SET name = ?, number = ?, address = ?, email=? WHERE id = ?";
+        //String sql = "UPDATE Customer SET name = ?, number = ?, address = ?, email=? WHERE id = ?";
         try {
-            Connection connection=DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,name);
-            pstm.setObject(2,tel);
-            pstm.setObject(3,address);
-            pstm.setObject(4,email);
-            pstm.setObject(5,id);
-
-            if(pstm.executeUpdate()>0) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Customer updated !").show();
-                clearFields();
-            }
+           if(!existCustomer(id)){
+               new Alert(Alert.AlertType.ERROR,"Can't updated");
+           }
+           customerBO.updateCustomer(new CustomerDTO(id,name,email,tel,address));
+           tblCustomer.getItems().add(new CustomerTm(id, name,email,tel,address));
             }catch(SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
         initialize();
+
     }
+
 
     private void clearFields(){
         txtId.setText("");

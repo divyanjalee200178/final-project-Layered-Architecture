@@ -11,24 +11,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Customer;
-import lk.ijse.model.Employee;
 import lk.ijse.model.Supplier;
-import lk.ijse.model.tm.CustomerTm;
-import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.model.tm.SupplierTm;
-import lk.ijse.repository.CustomerRepo;
-import lk.ijse.repository.EmployeeRepo;
 import lk.ijse.repository.SupplierRepo;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import javafx.scene.input.KeyEvent;
-import lk.ijse.util.Regex;
 
 public class SupplierFormController {
 

@@ -12,4 +12,7 @@ public interface SupplierBO extends SuperBO {
     public boolean existSupplier(String id) throws SQLException, ClassNotFoundException;
 
     public boolean updateSupplier(SupplierDTO dto) throws SQLException, ClassNotFoundException;
+
+    public boolean deleteSupplier(String id) throws SQLException, ClassNotFoundException;
+
 }

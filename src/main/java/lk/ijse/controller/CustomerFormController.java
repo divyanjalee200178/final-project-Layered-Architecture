@@ -171,19 +171,17 @@ public class CustomerFormController {
        // String sql="DELETE FROM Customer WHERE id=?";
 
         try{
-            if(!existCustomer(id)){
-                new Alert(Alert.AlertType.ERROR,"There is no such customer associated with the id " + id).show();
-            }
-            customerBO.deleteCustomer(id);
-
-            tblCustomer.getItems().remove(tblCustomer.getSelectionModel().getSelectedItem());
-            tblCustomer.getSelectionModel().clearSelection();
-            initUI();
+           boolean isDeleted=customerBO.deleteCustomer(id);
+           if(isDeleted){
+               new Alert(Alert.AlertType.CONFIRMATION,"Customer deleted!").show();
+               tblCustomer.refresh();
+           }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        initialize();
 
     }
 

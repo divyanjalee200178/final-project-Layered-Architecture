@@ -207,13 +207,14 @@ public class EmployeeFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
 
         try{
-            boolean isDeleted=EmployeeRepo.delete(id);
+            boolean isDeleted=employeeBO.deleteEmployee(id);
             if(isDeleted){
-                new Alert(Alert.AlertType.CONFIRMATION, "Employee deleted !").show();
+                new Alert(Alert.AlertType.CONFIRMATION,"Employee deleted!").show();
+                tblEmployee.refresh();
             }
         }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();

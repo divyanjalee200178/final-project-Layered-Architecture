@@ -24,4 +24,8 @@ public class SupplierBOImpl implements SupplierBO {
     public boolean updateSupplier(SupplierDTO dto) throws SQLException, ClassNotFoundException {
         return supplierDAO.update(new Supplier(dto.getId(),dto.getName(),dto.getTel(),dto.getAddress(),dto.getEmail()));
     }
+
+    public boolean deleteSupplier(String id) throws SQLException, ClassNotFoundException {
+        return supplierDAO.delete(id);
+    }
 }

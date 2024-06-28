@@ -1,9 +1,9 @@
 package lk.ijse.model.tm;
 
 
+import org.w3c.dom.ls.LSOutput;
 
-
-public class CustomerTm {
+public class CustomerTm implements Comparable<CustomerTm>{
     private String id;
     private String name;
     private String address;
@@ -22,6 +22,7 @@ public class CustomerTm {
     }
 
     public String getId() {
+        //System.out.println(id);
         return id;
     }
 
@@ -71,4 +72,15 @@ public class CustomerTm {
                 ", tel='" + tel + '\'' +
                 '}';
     }
+
+    @Override
+    public int compareTo(CustomerTm c) {
+        if (id == null) {
+            return (c.getId() == null) ? 0 : -1;
+        }
+        return id.compareTo(c.getId());
+    }
+
+
+
 }

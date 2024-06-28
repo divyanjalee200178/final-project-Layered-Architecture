@@ -13,7 +13,7 @@ public class CustomerBOImpl implements CustomerBO {
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.exist(id);
+        return customerDAO.delete(id);
     }
 
     @Override

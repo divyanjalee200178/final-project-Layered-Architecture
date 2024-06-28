@@ -24,4 +24,8 @@ public class EmployeeBOImpl implements EmployeeBO {
     public boolean updateEmployee(EmployeeDTO dto) throws SQLException, ClassNotFoundException {
         return employeeDAO.update(new Employee(dto.getId(),dto.getName(),dto.getTel(),dto.getAddress(),dto.getEmail()));
     }
+
+    public boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException {
+        return employeeDAO.delete(id);
+    }
 }

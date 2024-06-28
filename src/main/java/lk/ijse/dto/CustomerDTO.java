@@ -1,6 +1,8 @@
 package lk.ijse.dto;
 
-public class CustomerDTO {
+import java.io.Serializable;
+
+public class CustomerDTO  {
     private String id;
     private String name;
     private String address;

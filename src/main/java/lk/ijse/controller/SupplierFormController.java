@@ -169,23 +169,18 @@ public class SupplierFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String id=txtId.getText();
 
-        String sql="DELETE FROM Supplier WHERE id=?";
+        //String sql="DELETE FROM Supplier WHERE id=?";
 
         try{
-            Connection connection=DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,id);
-
-            if(pstm.executeUpdate()>0) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Supplier deleted !").show();
-                clearFields();
-            }else{
-                new Alert(Alert.AlertType.INFORMATION,"Supplier id can't be found !");
-
+            boolean isDeleted=supplierBO.deleteSupplier(id);
+            if(isDeleted){
+                new Alert(Alert.AlertType.CONFIRMATION,"Supplier deleted!").show();
+                tblSupplier.refresh();
             }
+
         }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

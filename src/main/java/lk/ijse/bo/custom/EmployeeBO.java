@@ -12,4 +12,6 @@ public interface EmployeeBO extends SuperBO {
     public boolean existEmployee(String id) throws SQLException, ClassNotFoundException;
 
     public boolean updateEmployee(EmployeeDTO dto) throws SQLException, ClassNotFoundException;
+
+    public  boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException;
 }

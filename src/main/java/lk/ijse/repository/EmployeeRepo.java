@@ -70,15 +70,7 @@ public class EmployeeRepo {
         return empList;
     }
 
-    public static boolean delete(String id) throws SQLException{
-        String sql="DELETE FROM Employee WHERE id=?";
 
-        Connection connection=DbConnection.getInstance().getConnection();
-        PreparedStatement pstm=connection.prepareStatement(sql);
-        pstm.setObject(1,id);
-
-        return pstm.executeUpdate()>0;
-    }
 
 
     public static List<String> getIds() throws SQLException {

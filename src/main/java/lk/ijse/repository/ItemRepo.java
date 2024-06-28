@@ -35,15 +35,7 @@ public class ItemRepo {
 
         return null;
     }
-    public static boolean delete(String code) throws SQLException {
-        String sql = "DELETE FROM Item WHERE code = ?";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setObject(1, code);
-
-        return pstm.executeUpdate() > 0;
-    }
 
     public static List<Item> getAllItem() throws SQLException {
         String sql = "SELECT * FROM Item";
@@ -81,19 +73,7 @@ public class ItemRepo {
 
         return pstm.executeUpdate() > 0;
     }
-    public static boolean save(Item item) throws SQLException {
-        String sql = "INSERT INTO Item VALUES(?, ?, ?, ?)";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-
-        pstm.setObject(1, item.getCode());
-        pstm.setObject(2, item.getDescription());
-        pstm.setObject(3, item.getUnitPrice());
-        pstm.setObject(4, item.getQtyOnHand());
-
-        return pstm.executeUpdate() > 0;
-    }
 
     private static boolean updateQty(String itemCode, int qty) throws SQLException {
         String sql = "UPDATE Item SET qtyOnHand = qtyOnHand - ? WHERE code = ?";

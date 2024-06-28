@@ -1,6 +1,8 @@
 package lk.ijse.dto;
 
-public class EmployeeDTO {
+import java.io.Serializable;
+
+public class EmployeeDTO implements Serializable {
     private String id;
     private String name;
     private String address;

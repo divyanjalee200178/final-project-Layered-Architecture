@@ -10,8 +10,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.db.DbConnection;
+import lk.ijse.dto.CustomerDTO;
+import lk.ijse.dto.EmployeeDTO;
+import lk.ijse.dto.ItemDTO;
 import lk.ijse.model.Item;
+import lk.ijse.model.tm.CustomerTm;
+import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.model.tm.ItemTm;
 import lk.ijse.repository.ItemRepo;
 
@@ -80,7 +87,7 @@ public class ItemFormController {
     @FXML
     private TextField txtUnitPrice;
 
-
+    ItemBO itemBO= (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
     public void initialize() {
         setCellValueFactory();
         loadAllItem();
@@ -167,13 +174,14 @@ public class ItemFormController {
         txtLocation.setText("");
     }
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
+    void btnDeleteOnAction(ActionEvent event) throws ClassNotFoundException {
         String code=txtCode.getText();
 
         try{
-            boolean isDeleted= ItemRepo.delete(code);
-            if(isDeleted) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Item deleted !").show();
+            boolean isDeleted=itemBO.deleteItem(code);
+            if(isDeleted){
+                new Alert(Alert.AlertType.CONFIRMATION,"Item deleted!").show();
+                tblItem.refresh();
             }
             }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -182,36 +190,34 @@ public class ItemFormController {
     }
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws ClassNotFoundException {
         String code=txtCode.getText();
         String description=txtDescription.getText();
         double unitPrice=Double.parseDouble(txtUnitPrice.getText());
         int qty=Integer.parseInt(txtQty.getText());
         String location=txtLocation.getText();
 
-        String sql="INSERT INTO Item VALUES(?,?,?,?,?)";
+        //String sql="INSERT INTO Item VALUES(?,?,?,?,?)";
+        if(btnSave.getText().equalsIgnoreCase("Save")) {
+            try {
+                if (existItem(code)) {
+                    new Alert(Alert.AlertType.ERROR, code + " already exists").show();
+                } else {
 
-        try{
-            Connection connection= DbConnection.getInstance().getConnection();
-            PreparedStatement pstm=connection.prepareStatement(sql);
-            pstm=connection.prepareStatement(sql);
-            pstm.setObject(1,code);
-            pstm.setObject(2,description);
-            pstm.setObject(3,unitPrice);
-            pstm.setObject(4,qty);
-            pstm.setObject(5,location);
+                    itemBO.saveItem(new ItemDTO(code,description,unitPrice,qty,location));
+                    tblItem.getItems().add(new ItemTm(code,description,unitPrice,qty,location));
+                }
 
-            boolean isSaved=pstm.executeUpdate()>0;
-            if(isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "Item saved Succsessfully!").show();
+            } catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
-        }catch (SQLException e){
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         initialize();
     }
 
-
+    boolean existItem(String code) throws SQLException, ClassNotFoundException {
+        return itemBO.existItem(code);
+    }
 
     @FXML
     void btnSearchOnAction(ActionEvent event) throws SQLException {
@@ -230,20 +236,21 @@ public class ItemFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String code = txtCode.getText();
         String description = txtDescription.getText();
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         int qty = Integer.parseInt(txtQty.getText());
         String location = txtLocation.getText();
 
-        Item item = new Item(code, description, qty, unitPrice, location);
+        //Item item = new Item(code, description, qty, unitPrice, location);
 
         try{
-            boolean isUpdated=ItemRepo.update(item);
-            if(isUpdated){
-                new Alert(Alert.AlertType.CONFIRMATION, "Item updated !").show();
+            if(!existItem(code)){
+                new Alert(Alert.AlertType.ERROR,"Can't updated");
             }
+            itemBO.updateItem(new ItemDTO(code,description,unitPrice,qty,location));
+            tblItem.getItems().add(new ItemTm(code,description,unitPrice,qty,location));
         }catch (SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

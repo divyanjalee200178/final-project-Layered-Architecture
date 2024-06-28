@@ -185,7 +185,6 @@ public class EmployeeFormController {
        // String sql="INSERT INTO Employee VALUES(?,?,?,?,?)";
         if (btnSave.getText().equalsIgnoreCase("Save")) {
             try {
-
                 if (existEmployee(id)) {
                     new Alert(Alert.AlertType.ERROR, id + " already exists").show();
                 } else {
@@ -259,7 +258,7 @@ public class EmployeeFormController {
         String email=txtEmail.getText();
         String tel=txtTel.getText();
 
-        Employee employee=new Employee(id,name,address,email,tel);
+       // Employee employee=new Employee(id,name,address,email,tel);
 
         try{
             if(!existEmployee(id)){

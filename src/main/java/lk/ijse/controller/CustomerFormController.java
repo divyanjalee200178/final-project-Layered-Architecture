@@ -185,18 +185,7 @@ public class CustomerFormController {
 
     }
 
-    private void initUI() {
-           clearFields();
-           txtId.setDisable(true);
-           txtName.setDisable(true);
-           txtAddress.setDisable(true);
-           txtTel.setDisable(true);
-           txtEmail.setDisable(true);
-           txtId.setEditable(false);
-           btnSave.setDisable(true);
-           btnDelete.setDisable(true);
 
-    }
 
     @FXML
     void btnExitOnAction(ActionEvent event) throws IOException{

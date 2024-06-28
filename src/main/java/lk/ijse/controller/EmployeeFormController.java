@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeFormController {
@@ -130,25 +131,18 @@ public class EmployeeFormController {
     }
 
     private void loadAllEmployee(){
-        ObservableList<EmployeeTm> obList= FXCollections.observableArrayList();
+        tblEmployee.getItems().clear();
+        try {
+            /*Get all customers*/
+            ArrayList<EmployeeDTO> allEmployees = employeeBO.getAllEmployees();
 
-        try{
-            List<Employee> empList= EmployeeRepo.getAll();
-            for(Employee employee : empList){
-                EmployeeTm tm=new EmployeeTm(
-                        employee.getId(),
-                        employee.getName(),
-                        employee.getAddress(),
-                        employee.getEmail(),
-                        employee.getTel()
-
-                );
-                obList.add(tm);
+            for (EmployeeDTO e : allEmployees) {
+                tblEmployee.getItems().add(new EmployeeTm(e.getId(), e.getName(), e.getAddress(),e.getEmail(),e.getTel()));
             }
-            tblEmployee.setItems(obList);
-
-        }catch (SQLException e){
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 

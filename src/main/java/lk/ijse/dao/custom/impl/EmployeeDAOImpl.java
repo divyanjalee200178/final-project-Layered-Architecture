@@ -8,6 +8,7 @@ import lk.ijse.entity.Employee;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     public boolean save(Employee entity) throws SQLException {
@@ -30,4 +31,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public Employee search(String id) throws SQLException {
         return SQLUtil.execute("SELECT * FROM employee WHERE id=?",id);
     }
+
+    public ArrayList<Employee> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Employee> allEmployees = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Employee");
+        while (rst.next()) {
+            Employee employee = new Employee(rst.getString("id"), rst.getString("name"), rst.getString("address"),rst.getString("email"),rst.getString("number"));
+            allEmployees.add(employee);
+        }
+        return allEmployees;
+    }
+
 }

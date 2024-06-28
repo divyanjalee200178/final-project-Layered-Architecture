@@ -8,6 +8,7 @@ import lk.ijse.entity.Supplier;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SupplierDAOImpl implements SupplierDAO {
     public boolean save(Supplier entity) throws SQLException {
@@ -30,4 +31,15 @@ public class SupplierDAOImpl implements SupplierDAO {
     public Supplier search(String id) throws SQLException {
         return SQLUtil.execute("SELECT * FROM Supplier WHERE id=?",id);
     }
+
+    public ArrayList<Supplier> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Supplier> allSupplier = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Supplier");
+        while (rst.next()) {
+            Supplier supplier = new Supplier(rst.getString("id"), rst.getString("name"), rst.getString("address"),rst.getString("email"),rst.getString("number"));
+            allSupplier.add(supplier);
+        }
+        return allSupplier;
+    }
+
 }

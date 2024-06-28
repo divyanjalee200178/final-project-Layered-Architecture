@@ -10,6 +10,7 @@ import lk.ijse.entity.Employee;
 import lk.ijse.entity.Item;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ItemBOImpl implements ItemBO {
     ItemDAO itemDAO= (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
@@ -27,5 +28,14 @@ public class ItemBOImpl implements ItemBO {
 
     public boolean updateItem(ItemDTO dto) throws SQLException, ClassNotFoundException {
         return itemDAO.update(new Item(dto.getCode(),dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand(),dto.getLocation()));
+    }
+
+    public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
+        ArrayList<ItemDTO> allItem= new ArrayList<>();
+        ArrayList<Item> all = itemDAO.getAll();
+        for (Item i : all) {
+            allItem.add(new ItemDTO(i.getCode(),i.getDescription(),i.getUnitPrice(),i.getQtyOnHand(),i.getLocation()));
+        }
+        return allItem;
     }
 }

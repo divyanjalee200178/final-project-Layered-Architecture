@@ -9,6 +9,7 @@ import lk.ijse.entity.Customer;
 import lk.ijse.entity.Employee;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class EmployeeBOImpl implements EmployeeBO {
     EmployeeDAO employeeDAO= (EmployeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.EMPLOYEE);
@@ -23,6 +24,14 @@ public class EmployeeBOImpl implements EmployeeBO {
 
     public boolean updateEmployee(EmployeeDTO dto) throws SQLException, ClassNotFoundException {
         return employeeDAO.update(new Employee(dto.getId(),dto.getName(),dto.getTel(),dto.getAddress(),dto.getEmail()));
+    }
+    public ArrayList<EmployeeDTO> getAllEmployees() throws SQLException, ClassNotFoundException {
+        ArrayList<EmployeeDTO> allEmployee= new ArrayList<>();
+        ArrayList<Employee> all = employeeDAO.getAll();
+        for (Employee e : all) {
+            allEmployee.add(new EmployeeDTO(e.getId(),e.getName(),e.getAddress(),e.getEmail(),e.getTel()));
+        }
+        return allEmployee;
     }
 
     public boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException {

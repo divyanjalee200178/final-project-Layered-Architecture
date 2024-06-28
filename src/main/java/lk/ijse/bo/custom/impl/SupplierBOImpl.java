@@ -9,6 +9,7 @@ import lk.ijse.entity.Employee;
 import lk.ijse.entity.Supplier;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SupplierBOImpl implements SupplierBO {
     SupplierDAO supplierDAO= (SupplierDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUPPLIER);
@@ -27,5 +28,14 @@ public class SupplierBOImpl implements SupplierBO {
 
     public boolean deleteSupplier(String id) throws SQLException, ClassNotFoundException {
         return supplierDAO.delete(id);
+    }
+
+    public ArrayList<SupplierDTO> getAllSuppliers() throws SQLException, ClassNotFoundException {
+        ArrayList<SupplierDTO> allSupplier= new ArrayList<>();
+        ArrayList<Supplier> all = supplierDAO.getAll();
+        for (Supplier s : all) {
+            allSupplier.add(new SupplierDTO(s.getId(),s.getName(),s.getAddress(),s.getEmail(),s.getTel()));
+        }
+        return allSupplier;
     }
 }

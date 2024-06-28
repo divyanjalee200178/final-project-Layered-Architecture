@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemFormController {
@@ -129,25 +130,17 @@ public class ItemFormController {
 
 
     private void loadAllItem(){
-        ObservableList<ItemTm> obList= FXCollections.observableArrayList();
+        tblItem.getItems().clear();
+        try {
+            ArrayList<ItemDTO> allItems = itemBO.getAllItems();
 
-        try{
-            List<Item> ItemList= ItemRepo.getAllItem();
-            for(Item item : ItemList){
-                ItemTm tm=new ItemTm(
-                        item.getCode(),
-                        item.getDescription(),
-                        item.getUnitPrice(),
-                        item.getQtyOnHand(),
-                        item.getLocation()
-
-                );
-                obList.add(tm);
+            for (ItemDTO i : allItems) {
+                tblItem.getItems().add(new ItemTm(i.getCode(), i.getDescription(), i.getUnitPrice(),i.getQtyOnHand(),i.getLocation()));
             }
-            tblItem.setItems(obList);
-
-        }catch (SQLException e){
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
     private void setCellValueFactory() {

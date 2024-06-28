@@ -4,9 +4,11 @@ import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.ItemDAO;
 import lk.ijse.entity.Customer;
 import lk.ijse.entity.Item;
+import lk.ijse.entity.Supplier;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
     public boolean delete(String code) throws SQLException {
@@ -29,5 +31,16 @@ public class ItemDAOImpl implements ItemDAO {
     public Item search(String code) throws SQLException {
         return SQLUtil.execute("SELECT * FROM Item WHERE code=?",code);
     }
+
+    public ArrayList<Item> getAll() throws SQLException, ClassNotFoundException {
+        ArrayList<Item> allItem = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Item");
+        while (rst.next()) {
+            Item item = new Item(rst.getString("code"), rst.getString("description"), rst.getDouble("unitPrice"),rst.getInt("qtyOnHand"),rst.getString("location"));
+            allItem.add(item);
+        }
+        return allItem;
+    }
+
 
 }

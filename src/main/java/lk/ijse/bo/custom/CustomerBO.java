@@ -4,6 +4,7 @@ import lk.ijse.bo.SuperBO;
 import lk.ijse.dto.CustomerDTO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface CustomerBO extends SuperBO {
     //public boolean exsistCustomer(String id) throws SQLException, ClassNotFoundException ;
@@ -13,6 +14,6 @@ public interface CustomerBO extends SuperBO {
 
     public boolean saveCustomer(CustomerDTO customerDTO)throws SQLException, ClassNotFoundException;
     public boolean updateCustomer(CustomerDTO customerDTO)throws SQLException, ClassNotFoundException;
-
+    public  ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException;
     public CustomerDTO searchCustomer(CustomerDTO customerDTO)throws SQLException, ClassNotFoundException;
 }

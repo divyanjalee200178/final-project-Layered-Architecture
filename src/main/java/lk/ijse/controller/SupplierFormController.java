@@ -14,9 +14,11 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.db.DbConnection;
 import lk.ijse.dto.CustomerDTO;
+import lk.ijse.dto.EmployeeDTO;
 import lk.ijse.dto.SupplierDTO;
 import lk.ijse.entity.Supplier;
 import lk.ijse.model.tm.CustomerTm;
+import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.model.tm.SupplierTm;
 import lk.ijse.repository.SupplierRepo;
 
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierFormController {
@@ -129,25 +132,17 @@ public class SupplierFormController {
     }
 
     private void loadAllSupplier(){
-        ObservableList<SupplierTm> obList= FXCollections.observableArrayList();
+        tblSupplier.getItems().clear();
+        try {
+            ArrayList<SupplierDTO> allSuppliers = supplierBO.getAllSuppliers();
 
-        try{
-            List<Supplier> supplierList= SupplierRepo.getAll();
-            for(Supplier supplier : supplierList){
-                SupplierTm tm=new SupplierTm(
-                        supplier.getId(),
-                        supplier.getName(),
-                        supplier.getAddress(),
-                        supplier.getEmail(),
-                        supplier.getTel()
-
-                );
-                obList.add(tm);
+            for (SupplierDTO s : allSuppliers) {
+                tblSupplier.getItems().add(new SupplierTm(s.getId(), s.getName(), s.getAddress(),s.getEmail(),s.getTel()));
             }
-            tblSupplier.setItems(obList);
-
-        }catch (SQLException e){
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 

@@ -13,7 +13,6 @@ import lk.ijse.bo.custom.EmployeeBO;
 import lk.ijse.entity.Employee;
 import lk.ijse.models.EmployeeDTO;
 import lk.ijse.model.tm.EmployeeTm;
-import lk.ijse.repository.EmployeeRepo;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -291,19 +290,23 @@ public class EmployeeFormController {
 
     @FXML
     void btnEnterOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-        String tele=txtTelSearch.getText();
+        String tele = txtTelSearch.getText();
+        try {
+            Employee employee = employeeBO.searchByNumber(tele);
+            if (employee != null) {
+                System.out.println(employee.getId());
+                //txtId.setText(customer.getId());
+                txtId.setText(employee.getId());
+                txtName.setText(employee.getName());
+                txtAddress.setText(employee.getAddress());
+                txtEmail.setText(employee.getEmail());
+                txtTel.setText(employee.getTel());
 
-        Employee employee=employeeBO.searchByNumber(tele);
-        if(employee !=null){
-            //txtId.setText(employee.getId());
-            txtId.setText(employee.getId());
-            txtName.setText(employee.getName());
-            txtAddress.setText(employee.getAddress());
-            txtEmail.setText(employee.getEmail());
-            txtTel.setText(employee.getTel());
-        }else {
-            new Alert(Alert.AlertType.INFORMATION, "Employee not found !").show();
-
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Customer not found!").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
 
     }

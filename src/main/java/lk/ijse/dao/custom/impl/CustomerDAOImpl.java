@@ -6,6 +6,7 @@ import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.CustomerDAO;
 import lk.ijse.entity.Customer;
+import lk.ijse.entity.Employee;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,10 +41,10 @@ public class CustomerDAOImpl implements CustomerDAO {
     public String generateNewId() throws SQLException, ClassNotFoundException {
         return null;
     }
-    public Customer searchContact(String tele) throws SQLException,ClassNotFoundException{
+    public Customer searchContact(String tele) throws SQLException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM customer WHERE number = ?", tele+ "");
         rst.next();
-        return new Customer(tele + "", rst.getString("name"), rst.getString("address"), rst.getString("email"),rst.getString("number"));
+        return new Customer(/*tele + ""*/rst.getString("id"), rst.getString("name"), rst.getString("address"), rst.getString("email"),tele + "");
     }
     public ArrayList<Customer> getAll() throws SQLException, ClassNotFoundException {
         ArrayList<Customer> allCustomers = new ArrayList<>();

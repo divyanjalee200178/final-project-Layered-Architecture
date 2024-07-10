@@ -52,8 +52,10 @@ public class SupplierDAOImpl implements SupplierDAO {
     }
 
     @Override
-    public Supplier searchContact(String tel) throws SQLException, ClassNotFoundException {
-        return null;
+    public Supplier searchContact(String tele) throws SQLException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM supplier WHERE number = ?", tele+ "");
+        rst.next();
+        return new Supplier(/*tele + ""*/rst.getString("id"), rst.getString("name"), rst.getString("address"), rst.getString("email"),tele + "");
     }
 
 }

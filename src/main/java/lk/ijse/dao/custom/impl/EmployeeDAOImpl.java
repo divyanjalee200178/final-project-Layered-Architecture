@@ -37,7 +37,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public Employee searchContact(String tele) throws SQLException {
         ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE number = ?", tele+ "");
         rst.next();
-        return new Employee(tele + "", rst.getString("name"), rst.getString("address"), rst.getString("email"),rst.getString("number"));
+        return new Employee(/*tele + ""*/rst.getString("id"), rst.getString("name"), rst.getString("address"), rst.getString("email"),tele + "");
     }
 
     public String generateNewId() throws SQLException, ClassNotFoundException {

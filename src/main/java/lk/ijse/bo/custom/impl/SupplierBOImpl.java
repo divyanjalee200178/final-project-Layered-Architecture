@@ -4,6 +4,7 @@ import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.dao.DAOFactory;
 import lk.ijse.dao.custom.SupplierDAO;
 import lk.ijse.entity.Customer;
+import lk.ijse.entity.Employee;
 import lk.ijse.models.SupplierDTO;
 import lk.ijse.entity.Supplier;
 
@@ -40,5 +41,9 @@ public class SupplierBOImpl implements SupplierBO {
 
     public Supplier searchSupplier(String id) throws SQLException, ClassNotFoundException {
         return supplierDAO.search(id);
+    }
+
+    public Supplier searchByNumber(String tele) throws SQLException, ClassNotFoundException {
+        return supplierDAO.searchContact(tele);
     }
 }

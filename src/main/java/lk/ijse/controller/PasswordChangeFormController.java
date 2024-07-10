@@ -9,11 +9,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.PasswordChangeBO;
 import lk.ijse.model.User;
-import lk.ijse.repository.UserRepo;
+import lk.ijse.model.tm.CustomerTm;
+import lk.ijse.models.CustomerDTO;
+import lk.ijse.models.UserDTO;
+//import lk.ijse.repository.UserRepo;
 
 import java.io.IOException;
 import java.sql.SQLException;
+
+//import static jdk.internal.misc.OSEnvironment.initialize;
 
 public class PasswordChangeFormController {
 
@@ -34,6 +42,7 @@ public class PasswordChangeFormController {
 
     @FXML
     private TextField txtUserId;
+    PasswordChangeBO passwordChangeBO= (PasswordChangeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
 
     @FXML
     void btnExitOnAction(ActionEvent event) throws IOException {
@@ -46,22 +55,21 @@ public class PasswordChangeFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = txtUserId.getText();
         String name = txtConfirmPass.getText();
         String pw = txtNewPass.getText();
 
-
-        User user = new User(id, name, pw);
-
+        //String sql = "UPDATE Customer SET name = ?, number = ?, address = ?, email=? WHERE id = ?";
         try {
-            boolean isUpdated = UserRepo.update(user);
-            if (isUpdated) {
-                new Alert(Alert.AlertType.CONFIRMATION, "User updated !").show();
-            }
-        } catch (SQLException e) {
+            passwordChangeBO.updateUser(new UserDTO(id,name,pw));
+            //tblCustomer.getItems().add(new CustomerTm(id, name,email,tel,address));
+        }catch(SQLException e){
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
+
+
 
     }
 }

@@ -16,23 +16,14 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.bo.custom.PlaceOrderBO;
-import lk.ijse.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.dao.custom.CustomerDAO;
-import lk.ijse.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.db.DbConnection;
 import lk.ijse.entity.Customer;
 import lk.ijse.entity.Item;
-import lk.ijse.entity.OrderDetail;
-import lk.ijse.model.*;
 import lk.ijse.model.tm.CartTm;
-import lk.ijse.model.tm.OrderTm;
 import lk.ijse.models.CustomerDTO;
 import lk.ijse.models.ItemDTO;
 import lk.ijse.models.OrderDTO;
 import lk.ijse.models.OrderDetailDTO;
-import lk.ijse.repository.CustomerRepo;
-import lk.ijse.repository.ItemRepo;
-import lk.ijse.repository.OrderRepo;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -45,7 +36,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class PlaceorderFormController {
 

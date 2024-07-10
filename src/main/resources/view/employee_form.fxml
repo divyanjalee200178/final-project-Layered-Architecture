@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="rootNode" prefHeight="663.0" prefWidth="868.0" style="-fx-background-color: E1ACAC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.EmployeeFormController">
+<AnchorPane fx:id="rootNode" prefHeight="663.0" prefWidth="868.0" style="-fx-background-color: E1ACAC;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.controller.EmployeeFormController">
    <children>
       <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="626.0" prefWidth="620.0" style="-fx-background-color: E1ACAC;">
          <children>
@@ -51,7 +46,7 @@
             </TableView>
             <TextField fx:id="txtTelSearch" layoutX="274.0" layoutY="261.0" prefHeight="24.0" prefWidth="228.0" />
             <Text layoutX="274.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Phone number :" />
-            <Button fx:id="btnEnter" layoutX="442.0" layoutY="261.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="24.0" prefWidth="61.0" text="Enter" />
+            <Button fx:id="btnEnter" layoutX="423.0" layoutY="185.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="24.0" prefWidth="61.0" text="Enter" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="634.0" layoutY="15.0" prefHeight="635.0" prefWidth="222.0" style="-fx-background-color: E1ACAC;">

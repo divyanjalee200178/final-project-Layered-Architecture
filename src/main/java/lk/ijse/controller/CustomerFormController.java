@@ -13,7 +13,6 @@ import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.models.CustomerDTO;
 import lk.ijse.entity.Customer;
 import lk.ijse.model.tm.CustomerTm;
-import lk.ijse.repository.CustomerRepo;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -307,7 +306,7 @@ public class CustomerFormController {
         try {
             Customer customer = customerBO.searchByNumber(tele);
             if (customer != null) {
-                txtId.setText(customer.getId());
+                //txtId.setText(customer.getId());
                 txtId.setText(customer.getId());
                 txtName.setText(customer.getName());
                 txtAddress.setText(customer.getAddress());

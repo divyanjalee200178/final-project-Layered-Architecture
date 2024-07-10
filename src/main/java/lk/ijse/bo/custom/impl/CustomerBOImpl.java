@@ -3,14 +3,15 @@ package lk.ijse.bo.custom.impl;
 import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.dao.DAOFactory;
 import lk.ijse.dao.custom.CustomerDAO;
-import lk.ijse.dto.CustomerDTO;
+import lk.ijse.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.models.CustomerDTO;
 import lk.ijse.entity.Customer;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerBOImpl implements CustomerBO {
-
+   // private static CustomerDAOImpl customerDAOImpl;
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
 
     public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
@@ -39,15 +40,21 @@ public class CustomerBOImpl implements CustomerBO {
         return allCustomers;
     }
 
-    @Override
-    public CustomerDTO searchCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-        Customer c=customerDAO.search(customerDTO.getId());
-        return new CustomerDTO(c.getId(),c.getName(),c.getTel(),c.getAddress(),c.getEmail());
+
+    public Customer searchCustomer(String id) throws SQLException, ClassNotFoundException {
+            return customerDAO.search(id);
+        }
+
+    public Customer searchByNumber(String tele) throws SQLException, ClassNotFoundException {
+        return customerDAO.searchContact(tele);
     }
 
+    public Customer searchById(String id) throws SQLException, ClassNotFoundException {
+        if (customerDAO == null) {
+            throw new IllegalStateException("CustomerDAO has not been initialized.");
+        }
 
-    public CustomerDTO searchCustomer(String id) throws SQLException, ClassNotFoundException {
-        Customer c=customerDAO.search(id);
-        return new CustomerDTO(c.getId(),c.getName(),c.getTel(),c.getAddress(),c.getEmail());
+        Customer c = customerDAO.search(id);
+        return new Customer(c.getId(), c.getName(), c.getTel(), c.getAddress(), c.getEmail());
     }
 }

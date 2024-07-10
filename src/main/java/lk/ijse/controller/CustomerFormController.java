@@ -1,7 +1,5 @@
 package lk.ijse.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,19 +10,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.CustomerBO;
-import lk.ijse.db.DbConnection;
-import lk.ijse.dto.CustomerDTO;
+import lk.ijse.models.CustomerDTO;
 import lk.ijse.entity.Customer;
 import lk.ijse.model.tm.CustomerTm;
 import lk.ijse.repository.CustomerRepo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
 public class CustomerFormController {
 
     @FXML
@@ -231,32 +225,21 @@ public class CustomerFormController {
 
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException {
+    void btnSearchOnAction(ActionEvent event) throws ClassNotFoundException, SQLException {
         String id=txtId.getText();
-        String name=txtName.getText();
-        String address=txtAddress.getText();
-        String email=txtEmail.getText();
-        String tel=txtTel.getText();
 
-        //String sql="SELECT * FROM Customer WHERE id=?";
-        try{
-            if(!existCustomer(id)){
-        CustomerDTO customer=customerBO.searchCustomer(new CustomerDTO(id,name,tel,address,email));
-
-        txtName.setText(customer.getName());
-        txtTel.setText(customer.getTel());
-        txtTel.setText(customer.getAddress());
-        txtEmail.setText(customer.getEmail());
-
-            }else {
-                //clearFields();
-                tblCustomer.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
-                tblCustomer.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
-                tblCustomer.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("Tel"));
-                tblCustomer.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("address"));
-                tblCustomer.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("email"));
+        try {
+            Customer customer = customerBO.searchCustomer(id);
+            if (customer != null) {
+                txtId.setText(customer.getId());
+                txtName.setText(customer.getName());
+                txtAddress.setText(customer.getAddress());
+                txtTel.setText(customer.getTel());
+                txtEmail.setText(customer.getEmail());
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Customer not found!").show();
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
@@ -319,21 +302,24 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnEnterOnAction(ActionEvent event) throws SQLException {
-        String tele=txtTelSearch.getText();
+    void btnEnterOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+        String tele = txtTelSearch.getText();
+        try {
+            Customer customer = customerBO.searchByNumber(tele);
+            if (customer != null) {
+                txtId.setText(customer.getId());
+                txtId.setText(customer.getId());
+                txtName.setText(customer.getName());
+                txtAddress.setText(customer.getAddress());
+                txtEmail.setText(customer.getEmail());
+                txtTel.setText(customer.getTel());
 
-        Customer customer= CustomerRepo.searchByNumber(tele);
-        if(customer !=null){
-            txtId.setText(customer.getId());
-            txtName.setText(customer.getName());
-            txtAddress.setText(customer.getAddress());
-            txtEmail.setText(customer.getEmail());
-            txtTel.setText(customer.getTel());
-        }else {
-            new Alert(Alert.AlertType.INFORMATION, "Supplier not found !").show();
-
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Customer not found!").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
-
     }
 
 

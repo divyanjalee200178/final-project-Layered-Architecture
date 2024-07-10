@@ -1,4 +1,4 @@
-package lk.ijse.model;
+package lk.ijse.model.tm;
 import lombok.*;
 
 import java.sql.Date;
@@ -10,10 +10,11 @@ import java.sql.Date;
 @ToString
 @EqualsAndHashCode
 
-public class Order {
+public class OrderTm {
     private String orderId;
+    private String description;
     private String customerId;
-    private Date date;
+
 
 
 }

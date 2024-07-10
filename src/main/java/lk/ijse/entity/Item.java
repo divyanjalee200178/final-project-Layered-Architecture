@@ -8,7 +8,7 @@ public class Item {
     private int qtyOnHand;
     private String location;
 
-    public Item() {
+    public Item(String code, String description, int qty, double unitPrice, String location) {
     }
 
     public Item(String code, String description, double unitPrice, int qtyOnHand, String location) {

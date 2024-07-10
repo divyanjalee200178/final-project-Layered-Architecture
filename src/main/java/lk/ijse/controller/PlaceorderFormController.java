@@ -12,14 +12,25 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.PlaceOrderBO;
+import lk.ijse.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.dao.custom.CustomerDAO;
+import lk.ijse.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.db.DbConnection;
 import lk.ijse.entity.Customer;
+import lk.ijse.entity.OrderDetail;
 import lk.ijse.model.*;
 import lk.ijse.model.tm.CartTm;
+import lk.ijse.model.tm.OrderTm;
+import lk.ijse.models.CustomerDTO;
+import lk.ijse.models.ItemDTO;
+import lk.ijse.models.OrderDTO;
+import lk.ijse.models.OrderDetailDTO;
 import lk.ijse.repository.CustomerRepo;
 import lk.ijse.repository.ItemRepo;
 import lk.ijse.repository.OrderRepo;
-import lk.ijse.repository.PlaceorderRepo;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -27,9 +38,12 @@ import net.sf.jasperreports.view.JasperViewer;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlaceorderFormController {
 
@@ -100,10 +114,13 @@ public class PlaceorderFormController {
     @FXML
     private TextField txtQty;
     String tempId;
+    private String orderId;
 
     private ObservableList<CartTm> obList = FXCollections.observableArrayList();
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
-    public void initialize() {
+    PlaceOrderBO placeOrderBO  = (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACE_ORDER);
+    public void initialize() throws ClassNotFoundException {
         setDate();
         getCurrentOrderId();
         getCustomerIds();
@@ -112,25 +129,21 @@ public class PlaceorderFormController {
     }
 
     private void getCustomerIds() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-
         try {
-            List<String> idList = CustomerRepo.getIds();
-
-            for(String id : idList) {
-                obList.add(id);
+            ArrayList<CustomerDTO> allCustomers = placeOrderBO.getAllCustomers();
+            for (CustomerDTO c : allCustomers) {
+                cmbCustomer.getItems().add(c.getId());
             }
-
-            cmbCustomer.setItems(obList);
-
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            new Alert(Alert.AlertType.ERROR, "Failed to load customer ids").show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-    private void getCurrentOrderId() {
+    private void getCurrentOrderId() throws ClassNotFoundException {
         try {
-            String currentId = OrderRepo.getCurrentId();
+            String currentId = placeOrderBO.getCurrentId();
 
             String nextOrderId = generateNextOrderId(currentId);
             lblOrderId.setText(nextOrderId);
@@ -164,19 +177,19 @@ public class PlaceorderFormController {
     }
 
     private void getItemCodes() {
-        ObservableList<String> obList = FXCollections.observableArrayList();
-        try {
-            List<String> ItemList = ItemRepo.getCodes();
-
-            for (String code : ItemList) {
-                obList.add(String.valueOf(code));
-            }
-            cmbItemCode.setItems(obList);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        try{
+        ArrayList<ItemDTO> allItems = placeOrderBO.getAllItems();
+        for (ItemDTO i : allItems) {
+            cmbItemCode.getItems().add(i.getCode());
         }
+
+    } catch (SQLException e) {
+        new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
     }
+
+}
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
         String code = cmbItemCode.getValue();
@@ -248,32 +261,38 @@ public class PlaceorderFormController {
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
+    void btnPlaceOrderOnAction(ActionEvent event) throws ClassNotFoundException {
         String orderId = lblOrderId.getText();
         String customerId = cmbCustomer.getValue();
+        String description=lblDescription.getText();
         Date date = Date.valueOf(LocalDate.now());
 
-        var order = new Order(orderId, customerId, date);
 
-        List<OrderDetail> odList = new ArrayList<>();
+        var order = new OrderDTO(orderId, customerId, description);
+
+        List<OrderDetailDTO> odtList = new ArrayList<>();
 
         for (int i = 0; i < tblOrderCart.getItems().size(); i++) {
             CartTm tm = obList.get(i);
 
-            OrderDetail od = new OrderDetail(
+            OrderDetailDTO od = new OrderDetailDTO(
                     orderId,
                     tm.getCode(),
                     tm.getQty(),
                     tm.getUnitPrice()
             );
 
-            odList.add(od);
+            odtList.add(od);
         }
 
-        PlaceOrder po = new PlaceOrder(order, odList);
+
+       // OrderDetail od = new OrderDetail(order, odList);
         try {
-            boolean isPlaced = PlaceorderRepo.placeOrder(po);
+            boolean isPlaced = saveOrder(order ,odtList);
+            //tempId=lblOrderId.getText();
+            //getCurrentOrderId();
             if(isPlaced) {
+                System.out.println("hello");
                 tempId=lblOrderId.getText();
                 getCurrentOrderId();
                 new Alert(Alert.AlertType.CONFIRMATION, "Order Placed!").show();
@@ -283,23 +302,83 @@ public class PlaceorderFormController {
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+
+
     }
+
+    public boolean saveOrder(OrderDTO orderDTO,List<OrderDetailDTO> orderDetailList) throws SQLException, ClassNotFoundException {
+        return placeOrderBO.placeOrder(orderDTO,orderDetailList);
+    }
+        /*try {
+            boolean b = saveOrder(orderId,LocalDate.now(), cmbCustomer.getValue(),
+                    tblOrderCart.getItems().stream().map(tm -> new OrderDetail(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+
+            if (b) {
+                new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+
+
+        orderId = generateNextOrderId(orderId);
+        lblOrderId.setText("Order Id: " + orderId);
+        cmbCustomer.getSelectionModel().clearSelection();
+        cmbItemCode.getSelectionModel().clearSelection();
+        tblOrderCart.getItems().clear();
+        txtQty.clear();
+        //calculateTotal();
+    }
+
+    public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetail> orderList) throws SQLException, ClassNotFoundException {
+        OrderDTO orderDTO = new OrderDTO(orderId,customerId, orderDate, orderList);
+        return placeOrderBO.placeOrder(orderDTO);
+    }
+    public String generateNewOrderId() {
+        try {
+            return placeOrderBO.generateOrderID();
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "OID-001";
+    }*/
 
 
 
 
 
     @FXML
-    void cmbCustomerOnAction(ActionEvent event) {
+    void cmbCustomerOnAction(ActionEvent event) throws ClassNotFoundException {
         String id = cmbCustomer.getValue();
+
         try {
-            Customer customer = CustomerRepo.searchById(id);
+            Customer customer =customerBO.searchById(id);
 
             lblCustomerName.setText(customer.getName());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public  String getCurrentId() throws SQLException {
+        //String sql = "SELECT orderId FROM Orders ORDER BY orderId DESC LIMIT 1";
+        String sql="select concat('O',max(cast(substring(orderId,2)as unsigned)))as max_order_id from Orders";
+        PreparedStatement pstm = DbConnection.getInstance().getConnection()
+                .prepareStatement(sql);
+
+        ResultSet resultSet = pstm.executeQuery();
+        if (resultSet.next()) {
+            String orderId = resultSet.getString(1);
+            return orderId;
+        }
+        return null;
     }
 
     @FXML

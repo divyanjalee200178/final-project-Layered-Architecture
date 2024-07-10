@@ -1,8 +1,9 @@
 package lk.ijse.bo.custom;
 
 import lk.ijse.bo.SuperBO;
-import lk.ijse.dto.SupplierDTO;
+import lk.ijse.entity.Customer;
 import lk.ijse.entity.Supplier;
+import lk.ijse.models.SupplierDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,4 +19,5 @@ public interface SupplierBO extends SuperBO {
 
     public ArrayList<SupplierDTO> getAllSuppliers() throws SQLException, ClassNotFoundException;
 
+    public Supplier searchSupplier(String id)throws SQLException, ClassNotFoundException;
 }

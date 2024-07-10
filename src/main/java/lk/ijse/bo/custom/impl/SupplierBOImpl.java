@@ -3,9 +3,8 @@ package lk.ijse.bo.custom.impl;
 import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.dao.DAOFactory;
 import lk.ijse.dao.custom.SupplierDAO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.dto.SupplierDTO;
-import lk.ijse.entity.Employee;
+import lk.ijse.entity.Customer;
+import lk.ijse.models.SupplierDTO;
 import lk.ijse.entity.Supplier;
 
 import java.sql.SQLException;
@@ -37,5 +36,9 @@ public class SupplierBOImpl implements SupplierBO {
             allSupplier.add(new SupplierDTO(s.getId(),s.getName(),s.getAddress(),s.getEmail(),s.getTel()));
         }
         return allSupplier;
+    }
+
+    public Supplier searchSupplier(String id) throws SQLException, ClassNotFoundException {
+        return supplierDAO.search(id);
     }
 }

@@ -29,7 +29,19 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     public Employee search(String id) throws SQLException {
-        return SQLUtil.execute("SELECT * FROM employee WHERE id=?",id);
+            ResultSet rst= SQLUtil.execute("SELECT * FROM employee WHERE id=?", id);
+            rst.next();
+            return new Employee(rst.getString("id"), rst.getString("name"), rst.getString("address"),rst.getString("email"),rst.getString("number"));
+
+        }
+    public Employee searchContact(String tele) throws SQLException {
+        ResultSet rst = SQLUtil.execute("SELECT * FROM employee WHERE number = ?", tele+ "");
+        rst.next();
+        return new Employee(tele + "", rst.getString("name"), rst.getString("address"), rst.getString("email"),rst.getString("number"));
+    }
+
+    public String generateNewId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 
     public ArrayList<Employee> getAll() throws SQLException, ClassNotFoundException {
@@ -41,5 +53,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         }
         return allEmployees;
     }
+
+
 
 }

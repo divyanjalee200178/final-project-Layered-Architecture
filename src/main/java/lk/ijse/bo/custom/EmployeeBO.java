@@ -1,8 +1,8 @@
 package lk.ijse.bo.custom;
 
 import lk.ijse.bo.SuperBO;
-import lk.ijse.dto.EmployeeDTO;
 import lk.ijse.entity.Employee;
+import lk.ijse.models.EmployeeDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,4 +16,8 @@ public interface EmployeeBO extends SuperBO {
 
     public ArrayList<EmployeeDTO> getAllEmployees() throws SQLException, ClassNotFoundException;
     public  boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException;
+
+    public Employee searchEmployee(String id)throws SQLException, ClassNotFoundException;
+
+    public Employee searchByNumber(String tele) throws SQLException, ClassNotFoundException;
 }

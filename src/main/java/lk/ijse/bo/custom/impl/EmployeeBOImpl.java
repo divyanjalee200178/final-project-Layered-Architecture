@@ -3,9 +3,7 @@ package lk.ijse.bo.custom.impl;
 import lk.ijse.bo.custom.EmployeeBO;
 import lk.ijse.dao.DAOFactory;
 import lk.ijse.dao.custom.EmployeeDAO;
-import lk.ijse.dto.CustomerDTO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.entity.Customer;
+import lk.ijse.models.EmployeeDTO;
 import lk.ijse.entity.Employee;
 
 import java.sql.SQLException;
@@ -34,7 +32,15 @@ public class EmployeeBOImpl implements EmployeeBO {
         return allEmployee;
     }
 
+    public Employee searchEmployee(String id) throws SQLException, ClassNotFoundException {
+        return employeeDAO.search(id);
+    }
+
     public boolean deleteEmployee(String id) throws SQLException, ClassNotFoundException {
         return employeeDAO.delete(id);
+    }
+
+    public Employee searchByNumber(String tele) throws SQLException, ClassNotFoundException {
+        return employeeDAO.searchContact(tele);
     }
 }

@@ -1,7 +1,5 @@
 package lk.ijse.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,20 +10,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.EmployeeBO;
-import lk.ijse.db.DbConnection;
-import lk.ijse.dto.CustomerDTO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.model.Employee;
-import lk.ijse.model.tm.CustomerTm;
+import lk.ijse.entity.Employee;
+import lk.ijse.models.EmployeeDTO;
 import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.repository.EmployeeRepo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeFormController {
 
@@ -228,19 +220,22 @@ public class EmployeeFormController {
 
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) throws SQLException {
+    void btnSearchOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String id=txtId.getText();
 
-        Employee employee=EmployeeRepo.searchById(id);
-        if(employee !=null){
-           txtId.setText(employee.getId());
-           txtName.setText(employee.getName());
-           txtAddress.setText(employee.getAddress());
-           txtEmail.setText(employee.getEmail());
-           txtTel.setText(employee.getTel());
-        }else {
-            new Alert(Alert.AlertType.INFORMATION, "Employee not found !").show();
-
+        try {
+            Employee employee = employeeBO.searchEmployee(id);
+            if (employee != null) {
+                txtId.setText(employee.getId());
+                txtName.setText(employee.getName());
+                txtAddress.setText(employee.getAddress());
+                txtTel.setText(employee.getTel());
+                txtEmail.setText(employee.getEmail());
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Employee not found!").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 
@@ -295,10 +290,10 @@ public class EmployeeFormController {
 
 
     @FXML
-    void btnEnterOnAction(ActionEvent event) throws SQLException {
+    void btnEnterOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String tele=txtTelSearch.getText();
 
-        Employee employee=EmployeeRepo.searchByTel(tele);
+        Employee employee=employeeBO.searchByNumber(tele);
         if(employee !=null){
             //txtId.setText(employee.getId());
             txtId.setText(employee.getId());

@@ -11,28 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepo {
-    public static List<Customer> getAll() throws SQLException{
-        String sql="SELECT * FROM Customer";
-
-        PreparedStatement pstm= DbConnection.getInstance().getConnection()
-                .prepareStatement(sql);
-
-        ResultSet resultSet=pstm.executeQuery();
-
-        List<Customer>cusList=new ArrayList<>();
-
-        while(resultSet.next()){
-            String id=resultSet.getString(1);
-            String name=resultSet.getString(2);
-            String address=resultSet.getString(3);
-            String email=resultSet.getString(4);
-            String tel=resultSet.getString(5);
-
-            Customer customer=new Customer(id,name,address,email,tel);
-            cusList.add(customer);
-        }
-        return cusList;
-    }
 
     public static List<String> getIds() throws SQLException{
         String sql="SELECT id FROM Customer";

@@ -1,9 +1,6 @@
 package lk.ijse.bo;
 
-import lk.ijse.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.bo.custom.impl.EmployeeBOImpl;
-import lk.ijse.bo.custom.impl.ItemBOImpl;
-import lk.ijse.bo.custom.impl.SupplierBOImpl;
+import lk.ijse.bo.custom.impl.*;
 
 import javax.swing.plaf.PanelUI;
 
@@ -17,7 +14,7 @@ public class BOFactory {
 
     }
     public enum BOTypes{
-        CUSTOMER,ITEM,SUPPLIER,EMPLOYEE,PO
+        CUSTOMER,ITEM,SUPPLIER,EMPLOYEE,PLACE_ORDER
     }
     public SuperBO getBO(BOTypes types){
         switch (types){
@@ -29,6 +26,8 @@ public class BOFactory {
                 return new SupplierBOImpl();
             case ITEM:
                 return new ItemBOImpl();
+            case PLACE_ORDER:
+                return new PlaceOrderBOImpl();
             default:
                 return null;
         }

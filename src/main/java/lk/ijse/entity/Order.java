@@ -1,7 +1,8 @@
-package lk.ijse.view;
+package lk.ijse.entity;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,8 +13,9 @@ import java.sql.Date;
 
 public class Order {
     private String orderId;
+    private String description;
     private String customerId;
-    private Date date;
+
 
 
 }

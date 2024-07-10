@@ -9,15 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.db.DbConnection;
-import lk.ijse.model.Employee;
 import lk.ijse.model.User;
-import lk.ijse.repository.EmployeeRepo;
 import lk.ijse.repository.UserRepo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class PasswordChangeFormController {

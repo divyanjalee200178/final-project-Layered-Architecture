@@ -2,7 +2,6 @@ package lk.ijse.repository;
 
 import lk.ijse.db.DbConnection;
 import lk.ijse.entity.Supplier;
-import lk.ijse.model.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,42 +33,6 @@ public class SupplierRepo {
         }
         return null;
     }
-
-
-
-    public static List<Supplier> getAll() throws SQLException {
-        String sql = "SELECT * FROM Supplier";
-
-        PreparedStatement pstm = DbConnection.getInstance().getConnection()
-                .prepareStatement(sql);
-
-        List<Supplier> supplierListList = new ArrayList<>();
-
-        ResultSet resultSet=pstm.executeQuery();
-
-        while (resultSet.next()) {
-            String id = resultSet.getString(1);
-            String name = resultSet.getString(2);
-            String address = resultSet.getString(3);
-            String email=resultSet.getString(4);
-            String tel = resultSet.getString(5);
-
-           Supplier supplier= new Supplier(id, name, address, email, tel);
-            supplierListList.add(supplier);
-        }
-        return supplierListList;
-    }
-
-    public static boolean delete(String id) throws SQLException{
-        String sql="DELETE FROM Supplier WHERE id=?";
-
-        Connection connection=DbConnection.getInstance().getConnection();
-        PreparedStatement pstm=connection.prepareStatement(sql);
-        pstm.setObject(1,id);
-
-        return pstm.executeUpdate()>0;
-    }
-
 
     public static List<String> getIds() throws SQLException {
         String sql = "SELECT id FROM Supplier";

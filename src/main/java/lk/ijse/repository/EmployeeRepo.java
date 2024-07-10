@@ -1,7 +1,7 @@
 package lk.ijse.repository;
 
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Employee;
+import lk.ijse.entity.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,41 +34,6 @@ public class EmployeeRepo {
         return null;
     }
 
-    public static boolean update(Employee employee) throws SQLException {
-        String sql = "UPDATE Employee SET name = ?, address = ?,email=?, number = ? WHERE id = ?";
-
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setObject(1, employee.getName());
-        pstm.setObject(2, employee.getAddress());
-        pstm.setObject(3,employee.getEmail());
-        pstm.setObject(4, employee.getTel());
-        pstm.setObject(5, employee.getId());
-
-        return pstm.executeUpdate() > 0;
-    }
-    public static List<Employee> getAll() throws SQLException {
-        String sql = "SELECT * FROM Employee";
-
-        PreparedStatement pstm = DbConnection.getInstance().getConnection()
-                .prepareStatement(sql);
-
-        List<Employee> empList = new ArrayList<>();
-
-        ResultSet resultSet=pstm.executeQuery();
-
-        while (resultSet.next()) {
-            String id = resultSet.getString(1);
-            String name = resultSet.getString(2);
-            String address = resultSet.getString(3);
-            String email=resultSet.getString(4);
-            String tel = resultSet.getString(5);
-
-            Employee employee = new Employee(id, name, address, email, tel);
-            empList.add(employee);
-        }
-        return empList;
-    }
 
 
 

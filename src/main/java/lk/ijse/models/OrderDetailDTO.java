@@ -1,6 +1,8 @@
-package lk.ijse.model;
+package lk.ijse.models;
 
-public class OrderDetail {
+import java.io.Serializable;
+
+public class OrderDetailDTO implements Serializable {
     private String orderId;
     private String code;
     private int qty;
@@ -48,14 +50,14 @@ public class OrderDetail {
         this.unitPrice = unitPrice;
     }
 
-    public OrderDetail(String orderId, String code, int qty, double unitPrice) {
+    public OrderDetailDTO(String orderId, String code, int qty, double unitPrice) {
         this.orderId = orderId;
         this.code = code;
         this.qty = qty;
         this.unitPrice = unitPrice;
     }
 
-    public OrderDetail() {
+    public OrderDetailDTO() {
     }
 
 

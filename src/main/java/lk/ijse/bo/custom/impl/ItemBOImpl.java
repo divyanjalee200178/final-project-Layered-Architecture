@@ -2,11 +2,9 @@ package lk.ijse.bo.custom.impl;
 
 import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.dao.DAOFactory;
-import lk.ijse.dao.custom.EmployeeDAO;
 import lk.ijse.dao.custom.ItemDAO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.dto.ItemDTO;
-import lk.ijse.entity.Employee;
+import lk.ijse.entity.Customer;
+import lk.ijse.models.ItemDTO;
 import lk.ijse.entity.Item;
 
 import java.sql.SQLException;
@@ -38,4 +36,8 @@ public class ItemBOImpl implements ItemBO {
         }
         return allItem;
     }
+   /* public Item searchItem(String code) throws SQLException, ClassNotFoundException {
+        return itemDAO.search(code);
+    }*/
+
 }

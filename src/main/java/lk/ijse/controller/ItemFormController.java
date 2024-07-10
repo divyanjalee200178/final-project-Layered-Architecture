@@ -1,7 +1,5 @@
 package lk.ijse.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,22 +10,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.ItemBO;
-import lk.ijse.db.DbConnection;
-import lk.ijse.dto.CustomerDTO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.dto.ItemDTO;
 import lk.ijse.model.Item;
-import lk.ijse.model.tm.CustomerTm;
-import lk.ijse.model.tm.EmployeeTm;
+import lk.ijse.models.ItemDTO;
 import lk.ijse.model.tm.ItemTm;
 import lk.ijse.repository.ItemRepo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ItemFormController {
 

@@ -1,14 +1,7 @@
 package lk.ijse.repository;
 
-import lk.ijse.db.DbConnection;
-import lk.ijse.model.Item;
-import lk.ijse.model.PlaceOrder;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-
 public class PlaceorderRepo {
-    public static boolean placeOrder(PlaceOrder po) throws SQLException {
+   /* public static boolean placeOrder(PlaceOrder po) throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
         connection.setAutoCommit(false);
 
@@ -33,5 +26,5 @@ public class PlaceorderRepo {
         } finally {
             connection.setAutoCommit(true);
         }
-    }
+    }*/
 }

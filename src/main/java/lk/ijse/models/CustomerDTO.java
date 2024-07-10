@@ -1,21 +1,23 @@
-package lk.ijse.dto;
+package lk.ijse.models;
 
-public class SupplierDTO {
+import java.io.Serializable;
+
+public class CustomerDTO implements Serializable {
     private String id;
     private String name;
     private String address;
     private String email;
     private String tel;
 
-    @Override
-    public String toString() {
-        return "Supplier{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                '}';
+    public CustomerDTO(String id, String name, String address, String email, String tel) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.tel = tel;
+    }
+
+    public CustomerDTO() {
     }
 
     public String getId() {
@@ -58,17 +60,14 @@ public class SupplierDTO {
         this.tel = tel;
     }
 
-    public SupplierDTO(String id, String name, String address, String email, String tel) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.tel = tel;
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", tel='" + tel + '\'' +
+                '}';
     }
-
-    public SupplierDTO() {
-    }
-
-
-
 }

@@ -1,7 +1,6 @@
 package lk.ijse.repository;
 
 import lk.ijse.db.DbConnection;
-import lk.ijse.model.Employee;
 import lk.ijse.model.User;
 
 import java.sql.Connection;

@@ -29,7 +29,16 @@ public class SupplierDAOImpl implements SupplierDAO {
     }
 
     public Supplier search(String id) throws SQLException {
-        return SQLUtil.execute("SELECT * FROM Supplier WHERE id=?",id);
+            ResultSet rst= SQLUtil.execute("SELECT * FROM supplier WHERE id=?", id);
+            rst.next();
+            return new Supplier(rst.getString("id"), rst.getString("name"), rst.getString("address"),rst.getString("email"),rst.getString("number"));
+
+
+    }
+
+
+    public String generateNewId() throws SQLException, ClassNotFoundException {
+        return null;
     }
 
     public ArrayList<Supplier> getAll() throws SQLException, ClassNotFoundException {
@@ -40,6 +49,11 @@ public class SupplierDAOImpl implements SupplierDAO {
             allSupplier.add(supplier);
         }
         return allSupplier;
+    }
+
+    @Override
+    public Supplier searchContact(String tel) throws SQLException, ClassNotFoundException {
+        return null;
     }
 
 }

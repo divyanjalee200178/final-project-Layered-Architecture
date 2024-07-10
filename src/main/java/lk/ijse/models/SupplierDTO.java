@@ -1,6 +1,6 @@
-package lk.ijse.model;
+package lk.ijse.models;
 
-public class Employee {
+public class SupplierDTO {
     private String id;
     private String name;
     private String address;
@@ -9,7 +9,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Supplier{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
@@ -58,7 +58,7 @@ public class Employee {
         this.tel = tel;
     }
 
-    public Employee(String id, String name, String address, String email, String tel) {
+    public SupplierDTO(String id, String name, String address, String email, String tel) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -66,6 +66,9 @@ public class Employee {
         this.tel = tel;
     }
 
-    public Employee() {
+    public SupplierDTO() {
     }
+
+
+
 }

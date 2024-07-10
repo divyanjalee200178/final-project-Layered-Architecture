@@ -14,6 +14,8 @@ public class CustomEntity {
     private int qtyOnHand; // Changed type to int
     private double unitPrice;
     private String location;
+
+
     public CustomEntity() {
     }
 

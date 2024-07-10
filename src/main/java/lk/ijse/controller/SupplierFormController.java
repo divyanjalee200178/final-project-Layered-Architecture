@@ -1,7 +1,5 @@
 package lk.ijse.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,22 +10,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.SupplierBO;
-import lk.ijse.db.DbConnection;
-import lk.ijse.dto.CustomerDTO;
-import lk.ijse.dto.EmployeeDTO;
-import lk.ijse.dto.SupplierDTO;
+import lk.ijse.entity.Customer;
+import lk.ijse.models.SupplierDTO;
 import lk.ijse.entity.Supplier;
-import lk.ijse.model.tm.CustomerTm;
-import lk.ijse.model.tm.EmployeeTm;
 import lk.ijse.model.tm.SupplierTm;
 import lk.ijse.repository.SupplierRepo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SupplierFormController {
 
@@ -229,19 +220,22 @@ public class SupplierFormController {
 
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) throws SQLException {
+    void btnSearchOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String id=txtId.getText();
 
-        Supplier supplier=SupplierRepo.searchById(id);
-        if(supplier !=null){
-            txtId.setText(supplier.getId());
-            txtName.setText(supplier.getName());
-            txtAddress.setText(supplier.getAddress());
-            txtEmail.setText(supplier.getEmail());
-            txtTel.setText(supplier.getTel());
-        }else {
-            new Alert(Alert.AlertType.INFORMATION, "Supplier not found !").show();
-
+        try {
+            Supplier supplier = supplierBO.searchSupplier(id);
+            if (supplier != null) {
+                txtId.setText(supplier.getId());
+                txtName.setText(supplier.getName());
+                txtAddress.setText(supplier.getAddress());
+                txtTel.setText(supplier.getTel());
+                txtEmail.setText(supplier.getEmail());
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Customer not found!").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
 

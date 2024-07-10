@@ -3,7 +3,6 @@ package lk.ijse.bo.custom.impl;
 import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.dao.DAOFactory;
 import lk.ijse.dao.custom.ItemDAO;
-import lk.ijse.entity.Customer;
 import lk.ijse.models.ItemDTO;
 import lk.ijse.entity.Item;
 
@@ -39,5 +38,12 @@ public class ItemBOImpl implements ItemBO {
    /* public Item searchItem(String code) throws SQLException, ClassNotFoundException {
         return itemDAO.search(code);
     }*/
+
+    public Item searchByCode(String code) throws SQLException, ClassNotFoundException {
+
+        Item c = itemDAO.search(code);
+        return new Item(c.getCode(), c.getDescription(), c.getUnitPrice(), c.getQtyOnHand(), c.getLocation());
+    }
+
 
 }

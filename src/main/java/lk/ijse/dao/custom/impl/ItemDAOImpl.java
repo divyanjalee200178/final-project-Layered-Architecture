@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lk.ijse.repository.ItemRepo.updateQty;
+//import static lk.ijse.repository.ItemRepo.updateQty;
 
 public class ItemDAOImpl implements ItemDAO {
     public boolean delete(String code) throws SQLException {

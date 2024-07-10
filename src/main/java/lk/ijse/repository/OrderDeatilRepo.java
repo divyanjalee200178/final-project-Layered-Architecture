@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class OrderDeatilRepo {
-    public static boolean save(List<OrderDetail> odList) throws SQLException {
+   /* public static boolean save(List<OrderDetail> odList) throws SQLException {
         for (OrderDetail od : odList) {
             boolean isSaved = save(od);
             if(!isSaved) {
@@ -30,5 +30,5 @@ public class OrderDeatilRepo {
         pstm.setDouble(4, od.getUnitPrice());
 
         return pstm.executeUpdate() > 0;
-    }
+    }*/
 }

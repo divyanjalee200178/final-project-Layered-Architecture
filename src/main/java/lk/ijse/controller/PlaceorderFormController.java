@@ -14,12 +14,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.CustomerBO;
+import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.bo.custom.PlaceOrderBO;
 import lk.ijse.bo.custom.impl.CustomerBOImpl;
 import lk.ijse.dao.custom.CustomerDAO;
 import lk.ijse.dao.custom.impl.CustomerDAOImpl;
 import lk.ijse.db.DbConnection;
 import lk.ijse.entity.Customer;
+import lk.ijse.entity.Item;
 import lk.ijse.entity.OrderDetail;
 import lk.ijse.model.*;
 import lk.ijse.model.tm.CartTm;
@@ -119,6 +121,7 @@ public class PlaceorderFormController {
     private ObservableList<CartTm> obList = FXCollections.observableArrayList();
     CustomerBO customerBO= (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
 
+    ItemBO itemBO=(ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
     PlaceOrderBO placeOrderBO  = (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACE_ORDER);
     public void initialize() throws ClassNotFoundException {
         setDate();
@@ -382,19 +385,16 @@ public class PlaceorderFormController {
     }
 
     @FXML
-    void cmbItemCodeOnAction(ActionEvent event) {
+    void cmbItemCodeOnAction(ActionEvent event) throws ClassNotFoundException {
         String code = cmbItemCode.getValue();
 
         try {
-            Item item = ItemRepo.searchByCode(code);
-            if(item != null) {
-                lblDescription.setText(item.getDescription());
-                lblUnitPrice.setText(String.valueOf(item.getUnitPrice()));
-                lblQtyOnHand.setText(String.valueOf(item.getQtyOnHand()));
-            }
+            Item item =itemBO.searchByCode(code);
 
+            lblDescription.setText(item.getDescription());
+            lblUnitPrice.setText(String.valueOf(item.getUnitPrice()));
+            lblQtyOnHand.setText(String.valueOf(item.getQtyOnHand()));
             txtQty.requestFocus();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

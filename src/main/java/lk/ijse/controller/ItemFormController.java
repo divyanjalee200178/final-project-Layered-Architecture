@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.ItemBO;
-import lk.ijse.model.Item;
+import lk.ijse.entity.Item;
 import lk.ijse.models.ItemDTO;
 import lk.ijse.model.tm.ItemTm;
 import lk.ijse.repository.ItemRepo;
@@ -203,10 +203,10 @@ public class ItemFormController {
     }
 
     @FXML
-    void btnSearchOnAction(ActionEvent event) throws SQLException {
+    void btnSearchOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String code=txtCode.getText();
 
-        Item item=ItemRepo.searchByCode(code);
+        Item item=itemBO.searchByCode(code);
         if(item !=null){
             txtCode.setText(item.getCode());
             txtDescription.setText(item.getDescription());

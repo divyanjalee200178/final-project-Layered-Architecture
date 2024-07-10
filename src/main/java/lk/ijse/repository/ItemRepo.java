@@ -1,8 +1,7 @@
 package lk.ijse.repository;
 
 import lk.ijse.db.DbConnection;
-
-import lk.ijse.model.Item;
+import lk.ijse.entity.Item;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class ItemRepo {
 
-    public static Item searchByCode(String code) throws SQLException {
+    /*public static Item searchByCode(String code) throws SQLException {
         String sql = "SELECT * FROM Item WHERE code = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();

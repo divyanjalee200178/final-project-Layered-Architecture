@@ -23,6 +23,8 @@ public interface CustomerBO extends SuperBO {
 
     public Customer searchByNumber(String tele) throws SQLException,ClassNotFoundException;
 
+    public int getCustomerCounts() throws SQLException;
+
 
     // public  void setCustomerDAO(CustomerDAOImpl dao) throws SQLException,ClassNotFoundException;
 }

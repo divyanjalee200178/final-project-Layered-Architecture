@@ -45,5 +45,8 @@ public class ItemBOImpl implements ItemBO {
         return new Item(c.getCode(), c.getDescription(), c.getUnitPrice(), c.getQtyOnHand(), c.getLocation());
     }
 
+    public int getItemCounts() throws SQLException {
+        return itemDAO.ItemCount();
+    }
 
 }

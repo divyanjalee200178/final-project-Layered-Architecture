@@ -19,4 +19,6 @@ public interface ItemBO extends SuperBO {
 
     //public Item searchItem(String code)throws SQLException, ClassNotFoundException;
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException;
+
+    public int getItemCounts() throws SQLException;
 }

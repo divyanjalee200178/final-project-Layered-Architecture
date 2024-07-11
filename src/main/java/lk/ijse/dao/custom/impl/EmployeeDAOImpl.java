@@ -54,6 +54,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         return allEmployees;
     }
 
+    public int EmployeeCount() throws SQLException {
+        ResultSet rst=SQLUtil.execute("SELECT COUNT(*) AS EmployeeCount FROM employee");
+        if(rst.next()){
+            return rst.getInt("EmployeeCount");
+        }
+        return 0;
+    }
 
 
 }

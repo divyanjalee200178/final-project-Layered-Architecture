@@ -11,4 +11,6 @@ public interface ItemDAO extends CrudDAO<Item> {
     public  boolean placeOrderUpdate(List<OrderDetail> oderList) throws SQLException;
    public boolean updateQty(String itemCode, int qty) throws SQLException ;
 
+    public int ItemCount() throws SQLException;
+
     }

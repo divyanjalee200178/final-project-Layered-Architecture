@@ -49,6 +49,11 @@ public class CustomerBOImpl implements CustomerBO {
         return customerDAO.searchContact(tele);
     }
 
+    @Override
+    public int getCustomerCounts() throws SQLException {
+        return customerDAO.CustomerCount();
+    }
+
     public Customer searchById(String id) throws SQLException, ClassNotFoundException {
         if (customerDAO == null) {
             throw new IllegalStateException("CustomerDAO has not been initialized.");

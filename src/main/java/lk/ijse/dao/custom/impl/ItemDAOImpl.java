@@ -4,9 +4,7 @@ import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.ItemDAO;
 import lk.ijse.entity.Item;
 import lk.ijse.entity.OrderDetail;
-import lk.ijse.entity.PlaceOrder;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -82,5 +80,12 @@ public class ItemDAOImpl implements ItemDAO {
 
         return false;
 
+    }
+    public int ItemCount() throws SQLException {
+        ResultSet rst=SQLUtil.execute("SELECT COUNT(*) AS ItemCount FROM Item");
+        if(rst.next()){
+            return rst.getInt("ItemCount");
+        }
+        return 0;
     }
 }

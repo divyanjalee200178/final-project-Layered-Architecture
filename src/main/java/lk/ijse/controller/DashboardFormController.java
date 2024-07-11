@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.*;
 import lk.ijse.db.DbConnection;
 
 import java.io.IOException;
@@ -70,6 +72,13 @@ public class DashboardFormController {
     private int EmployeeCount;
     private  int CustomerCount;
     private int OrderCount;
+
+    ItemBO itemBO= (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.ITEM);
+    EmployeeBO employeeBO= (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.EMPLOYEE);
+    PlaceOrderBO placeOrderBO= (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.PLACE_ORDER);
+    CustomerBO customerBO= (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+
+
     public void initialize() {
         tryItem();
         tryEmployee();
@@ -96,32 +105,20 @@ private void tryEmployee(){
         lblItemCount.setText(String.valueOf(ItemCount));
     }
     private int getItemCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS ItemCount FROM Item";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        ResultSet resultSet = pstm.executeQuery();
+        int itemCounts = itemBO.getItemCounts();
+        return itemCounts;
 
-        if(resultSet.next()) {
-            return resultSet.getInt("ItemCount");
-        }
-        return 0;
     }
 
     private void setEmployeeCount(int EmployeeCount) {
         lblEmployeeCount.setText(String.valueOf(EmployeeCount));
     }
     private int getEmployeeCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS EmployeeCount FROM Employee";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        ResultSet resultSet = pstm.executeQuery();
+        int employeeCounts = employeeBO.getEmployeeCounts();
+        return employeeCounts;
 
-        if(resultSet.next()) {
-            return resultSet.getInt("EmployeeCount");
-        }
-        return 0;
     }
 
     private void tryCustomer(){
@@ -136,16 +133,11 @@ private void tryEmployee(){
         lblCustomerCount.setText(String.valueOf(CustomerCount));
     }
     private int getCustomerCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS CustomerCount FROM Customer";
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        ResultSet resultSet = pstm.executeQuery();
+        int customerCounts = customerBO.getCustomerCounts();
+        return customerCounts;
 
-        if(resultSet.next()) {
-            return resultSet.getInt("CustomerCount");
-        }
-        return 0;
+
     }
 
     private void tryOrders(){
@@ -160,16 +152,9 @@ private void tryEmployee(){
         lblOrderCount.setText(String.valueOf(OrderCount));
     }
     private int getOrderCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS OrderCount FROM Orders";
+        int orderCounts = placeOrderBO.getCustomerCounts();
+        return orderCounts;
 
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        ResultSet resultSet = pstm.executeQuery();
-
-        if(resultSet.next()) {
-            return resultSet.getInt("OrderCount");
-        }
-        return 0;
     }
 
 

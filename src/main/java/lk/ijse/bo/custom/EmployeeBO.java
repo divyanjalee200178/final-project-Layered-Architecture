@@ -20,4 +20,6 @@ public interface EmployeeBO extends SuperBO {
     public Employee searchEmployee(String id)throws SQLException, ClassNotFoundException;
 
     public Employee searchByNumber(String tele) throws SQLException, ClassNotFoundException;
+
+    public int getEmployeeCounts() throws SQLException;
 }

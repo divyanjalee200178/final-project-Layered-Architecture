@@ -187,4 +187,9 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     public String getCurrentId() throws SQLException {
         return orderDAO.currentId();
     }
+
+    @Override
+    public int getCustomerCounts() throws SQLException {
+        return orderDAO.OrderCount();
+    }
 }

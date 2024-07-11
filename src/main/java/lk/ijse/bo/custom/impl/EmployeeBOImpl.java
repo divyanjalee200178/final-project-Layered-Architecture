@@ -43,4 +43,8 @@ public class EmployeeBOImpl implements EmployeeBO {
     public Employee searchByNumber(String tele) throws SQLException, ClassNotFoundException {
         return employeeDAO.searchContact(tele);
     }
+
+    public int getEmployeeCounts() throws SQLException {
+        return employeeDAO.EmployeeCount();
+    }
 }

@@ -44,6 +44,16 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
+    public int OrderCount() throws SQLException {
+        ResultSet rst=SQLUtil.execute("SELECT COUNT(*) AS OrderCount FROM orders");
+        if(rst.next()){
+            return rst.getInt("OrderCount");
+        }
+        return 0;
+
+    }
+
+    @Override
     public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         throw new UnsupportedOperationException("This Feature is not implemented yet");
     }

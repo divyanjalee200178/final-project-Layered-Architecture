@@ -56,5 +56,12 @@ public class CustomerDAOImpl implements CustomerDAO {
         return allCustomers;
     }
 
+    public int CustomerCount() throws SQLException {
+        ResultSet rst=SQLUtil.execute("SELECT COUNT(*) AS CustomerCount FROM customer");
+        if(rst.next()){
+            return rst.getInt("CustomerCount");
+        }
+        return 0;
+    }
 
 }

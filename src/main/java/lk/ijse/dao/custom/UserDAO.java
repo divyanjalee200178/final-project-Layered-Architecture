@@ -7,4 +7,7 @@ import java.sql.SQLException;
 
 public interface UserDAO extends CrudDAO<User> {
     public User check(String id,String password) throws SQLException, ClassNotFoundException;
+
+   // public boolean saveUserDetails(String userId, String name, String password) throws SQLException;
+
 }

@@ -8,7 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.PasswordChangeBO;
 import lk.ijse.db.DbConnection;
+import lk.ijse.models.UserDTO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,6 +32,9 @@ public class RegisterFormController {
     @FXML
     private TextField txtUserID;
     public AnchorPane rootNode;
+
+    PasswordChangeBO passwordChangeBO= (PasswordChangeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
+
 
    public void initialize(){
        addRegex(txtUserID);
@@ -62,26 +68,22 @@ public class RegisterFormController {
         stage.setTitle("Dashboard Form");
     }
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String userId = txtUserID.getText();
         String name = txtname.getText();
         String password = txtPassword.getText();
 
-        try {
-            boolean isSaved = saveUser(userId, name, password);
-            if(isSaved) {
-                new Alert(Alert.AlertType.CONFIRMATION, "user saved!").show();
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        boolean isSaved = passwordChangeBO.saveUser(new UserDTO(userId, name, password));
+        if(isSaved) {
+            new Alert(Alert.AlertType.CONFIRMATION, "user saved!").show();
         }
     }
 
-    private boolean saveUser(String userId, String name, String password) throws SQLException {
+   /* private boolean saveUser(String userId, String name, String password) throws SQLException {
         String sql = "INSERT INTO users VALUES(?, ?, ?)";
 
        /* DbConnection dbConnection = DbConnection.getInstance();
-        Connection connection = dbConnection.getConnection();*/
+        Connection connection = dbConnection.getConnection();
 
         Connection connection = DbConnection.getInstance().getConnection();
 
@@ -91,7 +93,9 @@ public class RegisterFormController {
         pstm.setObject(3, password);
 
         return pstm.executeUpdate() > 0;
-    }
+
+
+    }*/
 
     @FXML
     void txtNameOnAction(ActionEvent event) {

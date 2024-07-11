@@ -51,23 +51,24 @@ private AnchorPane rootNode;
 
    private void checkCredential(String userId, String password) throws SQLException, IOException, ClassNotFoundException {
        if(userId.isEmpty() && password.isEmpty()){
-           new Alert(Alert.AlertType.INFORMATION,"Empty fields Try again!");
+           new Alert(Alert.AlertType.INFORMATION,"Empty fields Try again!").show();
            return;
        }
        if(userId.isEmpty()){
-           new Alert(Alert.AlertType.INFORMATION,"User is Empty!");
+           new Alert(Alert.AlertType.INFORMATION,"User is Empty!").show();
            return;
        }
        if(password.isEmpty()){
-           new Alert(Alert.AlertType.INFORMATION,"Password is empty!");
+           new Alert(Alert.AlertType.INFORMATION,"Password is empty!").show();
        }
        User userDTO=passwordChangeBO.checkCreden(userId,password);
        if(userDTO==null){
-           new Alert(Alert.AlertType.INFORMATION,"Sorry userId can't be find");
+           new Alert(Alert.AlertType.INFORMATION,"Sorry userId can't be find").show();
            return;
        }
        if(!userDTO.getPassword().equals(password)){
-           new Alert(Alert.AlertType.ERROR,"Sorry!");
+           new Alert(Alert.AlertType.ERROR,"Sorry! wrong password").show();
+          // System.out.println("Sorry");
            return;
        }
        navigateToTheDashboard();

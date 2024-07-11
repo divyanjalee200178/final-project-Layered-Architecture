@@ -1,7 +1,5 @@
-package lk.ijse.model.tm;
+package lk.ijse.view.tdm;
 
-
-import org.w3c.dom.ls.LSOutput;
 
 public class CustomerTm implements Comparable<CustomerTm>{
     private String id;

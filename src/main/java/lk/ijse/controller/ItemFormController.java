@@ -12,7 +12,7 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.ItemBO;
 import lk.ijse.entity.Item;
 import lk.ijse.models.ItemDTO;
-import lk.ijse.model.tm.ItemTm;
+import lk.ijse.view.tdm.ItemTm;
 
 import java.io.IOException;
 import java.sql.SQLException;

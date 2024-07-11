@@ -12,7 +12,7 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.EmployeeBO;
 import lk.ijse.entity.Employee;
 import lk.ijse.models.EmployeeDTO;
-import lk.ijse.model.tm.EmployeeTm;
+import lk.ijse.view.tdm.EmployeeTm;
 
 import java.io.IOException;
 import java.sql.SQLException;

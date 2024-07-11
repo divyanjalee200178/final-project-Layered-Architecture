@@ -2,9 +2,9 @@ package lk.ijse.dao.custom.impl;
 
 import lk.ijse.dao.SQLUtil;
 import lk.ijse.dao.custom.UserDAO;
-import lk.ijse.entity.Customer;
-import lk.ijse.model.User;
+import lk.ijse.entity.User;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -31,13 +31,19 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-    @Override
-    public User search(String id) throws SQLException, ClassNotFoundException {
-        return null;
+
+    public User check(String id,String password) throws SQLException, ClassNotFoundException {
+        ResultSet rst= SQLUtil.execute("SELECT userId, password,name FROM users WHERE userId = ?", id);
+        rst.next();
+        return new User(rst.getString("userId"), rst.getString("name"),rst.getString("password"));
     }
 
     @Override
     public ArrayList<User> getAll() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    public User search(String id) throws SQLException, ClassNotFoundException {
         return null;
     }
 

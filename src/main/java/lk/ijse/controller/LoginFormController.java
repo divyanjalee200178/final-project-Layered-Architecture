@@ -2,7 +2,6 @@ package lk.ijse.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -10,19 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.db.DB;
-import lk.ijse.db.DbConnection;
+import lk.ijse.bo.BOFactory;
+import lk.ijse.bo.custom.PasswordChangeBO;
+import lk.ijse.entity.User;
 
-import javax.swing.*;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Objects;
 
 import static javafx.fxml.FXMLLoader.load;
-import static lk.ijse.db.DB.Password;
 
 
 public class LoginFormController {
@@ -40,8 +34,11 @@ private TextField txtUserID;
 @FXML
 private AnchorPane rootNode;
 
+    PasswordChangeBO passwordChangeBO= (PasswordChangeBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.USER);
+
+
 @FXML
-    void btnLoginOnAction(ActionEvent event) throws IOException {
+    void btnLoginOnAction(ActionEvent event) throws IOException, ClassNotFoundException {
     String userID = txtUserID.getText();
     String password = txtPassword.getText();
 
@@ -52,27 +49,29 @@ private AnchorPane rootNode;
     }
 }
 
-   private void checkCredential(String userId, String password) throws SQLException, IOException {
-        String sql = "SELECT userId, password FROM users WHERE userId = ?";
-
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-        pstm.setObject(1, userId);
-
-        ResultSet resultSet = pstm.executeQuery();
-        if(resultSet.next()) {
-            String dbPw = resultSet.getString("password");
-
-            if(password.equals(dbPw)) {
-                navigateToTheDashboard();
-            } else {
-                new Alert(Alert.AlertType.ERROR, "sorry! password is incorrect!").show();
-            }
-
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "sorry! user id can't be find!").show();
-        }
-    }
+   private void checkCredential(String userId, String password) throws SQLException, IOException, ClassNotFoundException {
+       if(userId.isEmpty() && password.isEmpty()){
+           new Alert(Alert.AlertType.INFORMATION,"Empty fields Try again!");
+           return;
+       }
+       if(userId.isEmpty()){
+           new Alert(Alert.AlertType.INFORMATION,"User is Empty!");
+           return;
+       }
+       if(password.isEmpty()){
+           new Alert(Alert.AlertType.INFORMATION,"Password is empty!");
+       }
+       User userDTO=passwordChangeBO.checkCreden(userId,password);
+       if(userDTO==null){
+           new Alert(Alert.AlertType.INFORMATION,"Sorry userId can't be find");
+           return;
+       }
+       if(!userDTO.getPassword().equals(password)){
+           new Alert(Alert.AlertType.ERROR,"Sorry!");
+           return;
+       }
+       navigateToTheDashboard();
+   }
 
 
 

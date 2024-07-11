@@ -1,4 +1,4 @@
-package lk.ijse.model.tm;
+package lk.ijse.view.tdm;
 import lombok.*;
 
 import java.sql.Date;

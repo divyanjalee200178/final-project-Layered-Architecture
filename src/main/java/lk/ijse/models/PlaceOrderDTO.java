@@ -1,6 +1,6 @@
 package lk.ijse.models;
 
-import lk.ijse.model.tm.OrderTm;
+import lk.ijse.view.tdm.OrderTm;
 import lk.ijse.entity.OrderDetail;
 import lombok.AllArgsConstructor;
 import lombok.Data;

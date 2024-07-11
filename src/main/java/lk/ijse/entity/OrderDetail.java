@@ -1,6 +1,6 @@
 package lk.ijse.entity;
 
-import lk.ijse.model.tm.OrderTm;
+import lk.ijse.view.tdm.OrderTm;
 
 import java.util.List;
 

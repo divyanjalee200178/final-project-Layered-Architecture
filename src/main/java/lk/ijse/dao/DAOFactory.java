@@ -1,7 +1,6 @@
 package lk.ijse.dao;
 
 import lk.ijse.dao.custom.impl.*;
-import lk.ijse.model.tm.CartTm;
 
 public class DAOFactory {
     private static DAOFactory daoFactory;

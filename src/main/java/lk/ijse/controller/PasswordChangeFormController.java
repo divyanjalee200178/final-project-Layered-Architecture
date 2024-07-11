@@ -10,11 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.bo.BOFactory;
-import lk.ijse.bo.custom.CustomerBO;
 import lk.ijse.bo.custom.PasswordChangeBO;
-import lk.ijse.model.User;
-import lk.ijse.model.tm.CustomerTm;
-import lk.ijse.models.CustomerDTO;
 import lk.ijse.models.UserDTO;
 //import lk.ijse.repository.UserRepo;
 

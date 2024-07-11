@@ -12,7 +12,7 @@ import lk.ijse.bo.BOFactory;
 import lk.ijse.bo.custom.SupplierBO;
 import lk.ijse.models.SupplierDTO;
 import lk.ijse.entity.Supplier;
-import lk.ijse.model.tm.SupplierTm;
+import lk.ijse.view.tdm.SupplierTm;
 
 import java.io.IOException;
 import java.sql.SQLException;

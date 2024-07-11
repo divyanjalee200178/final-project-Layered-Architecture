@@ -46,7 +46,7 @@
             </TableView>
             <TextField fx:id="txtTelSearch" layoutX="274.0" layoutY="261.0" prefHeight="24.0" prefWidth="228.0" />
             <Text layoutX="274.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Phone number :" />
-            <Button fx:id="btnEnter" layoutX="423.0" layoutY="185.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="24.0" prefWidth="61.0" text="Enter" />
+            <Button fx:id="btnEnter" layoutX="441.0" layoutY="261.0" mnemonicParsing="false" onAction="#btnEnterOnAction" prefHeight="24.0" prefWidth="61.0" text="Enter" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="634.0" layoutY="15.0" prefHeight="635.0" prefWidth="222.0" style="-fx-background-color: E1ACAC;">

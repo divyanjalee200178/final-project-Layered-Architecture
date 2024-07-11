@@ -39,7 +39,7 @@
                   <Image url="@../icon/new2.jpg" />
                </image>
             </ImageView>
-            <AnchorPane layoutX="676.0" layoutY="305.0" prefHeight="96.0" prefWidth="154.0" style="-fx-background-color: #FDA7DF; -fx-background-radius: 10; -fx-border-color: #B53471; -fx-border-radius: 10;">
+            <AnchorPane layoutX="676.0" layoutY="110.0" prefHeight="228.0" prefWidth="154.0" style="-fx-background-color: #FDA7DF; -fx-background-radius: 10; -fx-border-color: #B53471; -fx-border-radius: 10;">
                <children>
                   <Text layoutX="32.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Employees" />
                   <ImageView fitHeight="20.0" fitWidth="25.0" layoutX="2.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
